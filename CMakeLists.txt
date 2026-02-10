@@ -17,4 +17,4 @@ add_executable(deepdiep src/Entity.cpp src/Entity.hpp src/Tank.cpp src/Tank.hpp
 
 target_link_libraries(deepdiep sfml-graphics sfml-window sfml-system)
 
-file(COPY Monospace.ttf DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY assets/Monospace.ttf DESTINATION ${CMAKE_BINARY_DIR})
