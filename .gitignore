@@ -43,3 +43,4 @@
 # cmake
 CMakeCache.txt
 CMakeFiles/
+build/
