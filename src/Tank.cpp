@@ -10,12 +10,15 @@ Tank::Tank(World* world) :
     Entity(world, Entity::Team::PLAYER, 20.f, View::getShape("tank"), sf::Vector2f(0.f, 0.f), 0) {
     position_.x = radius_ * 2;
     position_.y = radius_ * 2;
-    setSpeed(3.f);
+    setSpeed(5.f);
     maxHP_ = 6;
     hp_ = 6;
     bodyDamage_ = 2;
 }
 Tank::~Tank() = default;
+
+int Tank::getReloadTime() { return reload_time_; }
+void Tank::setReloadTime(int reload) { reload_time_ = reload; }
 
 void Tank::update(const GameCmd* command) {
     if (command == nullptr)
@@ -58,5 +61,8 @@ void Tank::update(const GameCmd* command) {
 }
 
 void Tank::fire() {
-    world_->push(Entity::makeBullet(world_, getTeam(), getPosition().x, getPosition().y, getAngle()));
+    if ((int)(world_->getTick()) - last_fire_ >= reload_time_) {
+        world_->push(Entity::makeBullet(world_, getTeam(), getPosition().x, getPosition().y, getAngle()));
+        last_fire_ = world_->getTick();
+    }
 }

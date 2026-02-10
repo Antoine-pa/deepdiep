@@ -16,5 +16,12 @@ class Tank: public Entity {
 
         void fire();
         void update(const GameCmd* command) override;
+
+        int getReloadTime();
+        void setReloadTime(int reload);
+    
+    private:
+        int reload_time_ = 5;
+        int last_fire_ = 0;
 };
 #endif
