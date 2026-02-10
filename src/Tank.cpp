@@ -7,7 +7,9 @@
 #include <iostream>
 
 Tank::Tank(World* world) :
-    Entity(world, Entity::Team::PLAYER, 20., View::getShape("tank"), sf::Vector2f(world->getWidth() / 2, world->getHeight() / 2), 0) {
+    Entity(world, Entity::Team::PLAYER, 20.f, View::getShape("tank"), sf::Vector2f(0.f, 0.f), 0) {
+    position_.x = radius_ * 2;
+    position_.y = radius_ * 2;
     setSpeed(3.f);
     maxHP_ = 6;
     hp_ = 6;
