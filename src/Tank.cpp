@@ -44,15 +44,15 @@ void Tank::update(const GameCmd* command) {
     }
     setAngle(angle);
 
-    if (position_.x < -10.0f)
-        position_.x = world_->getWidth();
-    else if (position_.x > world_->getWidth())
-        position_.x = 0.0f;
+    if (position_.x - radius_ < 0.f)
+        position_.x = radius_;
+    else if (position_.x + radius_ > world_->getWidth())
+        position_.x = world_->getWidth() - radius_;
 
-    if (position_.y < -10.0f)
-        position_.y = world_->getHeight();
-    else if (position_.y > world_->getHeight())
-        position_.y = 0.0f;
+    if (position_.y - radius_ < 0.f)
+        position_.y = radius_;
+    else if (position_.y + radius_ > world_->getHeight())
+        position_.y = world_->getHeight() - radius_;
 }
 
 void Tank::fire() {
