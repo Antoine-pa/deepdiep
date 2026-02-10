@@ -49,16 +49,11 @@ void Entity::update(const GameCmd*) {
 
     if (rotSpeed_ != 0)
         setAngle(getAngle()+rotSpeed_);
-    
-    if (shape_ == View::getShape("bullet")) {
-        printf("bullet\n");
-    }
 
     sf::Vector2f distance = direction_ * speed_;
     position_ += distance;
     if (position_.x < -radius_ || position_.x > world_->getWidth() || position_.y < -radius_ || position_.y > world_->getHeight()) {
         kill();
-        printf("bye\n");
     }
 }
 
