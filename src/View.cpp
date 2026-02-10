@@ -1,0 +1,141 @@
+#include "View.hpp"
+
+#include <SFML/Graphics.hpp>
+
+#include <iostream>
+
+std::unordered_map<std::string, std::unique_ptr<sf::Shape>> View::shapes_;
+sf::Font View::font;
+
+void View::initAssets() {
+    if (not View::shapes_.empty()) // Don't call this function twice
+        return;
+
+    // There is not much assets in this game: only the shapes (that are built manually below) and the font
+    if (FILE *file = fopen("Monospace.ttf", "r")) {
+        fclose(file); // That file exists, cool.
+    } else {
+        std::cout << "Impossible to load Monospace.ttf. Please launch the binary from a directory containing this file (either cd to the right location, or copy this file).\n";
+    }
+    if (!font.loadFromFile("Monospace.ttf")) {
+        std::cout << "Runtime error: could not load Monospace.ttf font file\n";
+        exit(1);
+    }
+
+    // If you want to have a shape made with several shapes, you should look at
+    // https://github.com/SFML/SFML/wiki/Tutorial:-Drawable-Group
+
+    // Create squares
+    auto square = new sf::CircleShape(20.f, 4);
+    square->setFillColor(sf::Color::Yellow);
+    square->setOutlineColor(sf::Color(sf::Color::Yellow.r, sf::Color::Yellow.g, sf::Color::Yellow.b, 150));
+    square->setOutlineThickness(3);
+    square->setOrigin(20,20);
+    registerShape("square", square);
+
+    // Bullets
+    auto bullet = new sf::CircleShape(2.f, 20);
+    bullet->setFillColor(sf::Color::Blue);
+    bullet->setOutlineColor(sf::Color(sf::Color::Blue.r, sf::Color::Blue.g, sf::Color::Blue.b, 150));
+    bullet->setOutlineThickness(1);
+    bullet->setOrigin(2,2);
+    registerShape("bullet", bullet);
+
+    // Tank
+    auto tank = new sf::RectangleShape(sf::Vector2f(23 ,12));
+    tank->setFillColor(sf::Color(115, 115, 115));
+    tank->setOutlineColor(sf::Color(38, 38, 38));
+    tank->setOrigin(-4,6);
+    tank->setOutlineThickness(1);
+    registerShape("tank", tank);
+
+    // Empty tank
+    auto emptyTank = new sf::CircleShape(12.f, 20);
+    emptyTank->setFillColor(sf::Color(128, 191, 255));
+    emptyTank->setOutlineColor(sf::Color(51, 153, 255));
+    emptyTank->setOutlineThickness(5);
+    emptyTank->setOrigin(12,12);
+    registerShape("empty tank", emptyTank);
+
+    // horizontal grid element
+    auto hline = new sf::RectangleShape(sf::Vector2f(0,1000));
+    hline->setFillColor(sf::Color(145, 145, 145));
+    hline->setOutlineColor(sf::Color(145, 145, 145));
+    hline->setOutlineThickness(1);
+    registerShape("hline", hline);
+    auto vline = new sf::RectangleShape(*hline);
+    vline->setSize(sf::Vector2f(1000,0));
+    registerShape("vline", vline);
+}
+
+View::View(std::shared_ptr<World> world, std::shared_ptr<sf::RenderWindow> window): world_(world), window_(window) {
+    initAssets();
+}
+
+void View::registerShape(std::string name, sf::Shape *shape) {
+    shapes_.insert({name, std::unique_ptr<sf::Shape>(shape)});
+}
+sf::Shape* View::getShape(std::string name) {
+    initAssets();
+    return shapes_.at(name).get();
+}
+
+void View::update(std::string overlayText, int x, int y) {
+    window_->clear(sf::Color(225, 225, 225));
+
+    // Draw a grid
+    auto hline = getShape("hline");
+    for (int i=0; i<world_->getWidth();i += 50) {
+        hline->setPosition(sf::Vector2f(i,0));
+        window_->draw(*hline);
+    }
+    auto vline = getShape("vline");
+    for (int i=0; i<world_->getHeight();i += 50) {
+        vline->setPosition(sf::Vector2f(0,i));
+        window_->draw(*vline);
+    }
+
+    for (auto const& e: world_->entities) {
+        auto shape = e->getShape();
+        shape->setRotation(e->getAngle());
+        shape->setPosition(e->getPosition());
+        window_->draw(*shape);
+        auto hpRatio = e->getHPRatio();
+        if (hpRatio>0 && hpRatio<1) {
+            auto bar = sf::RectangleShape();
+            auto progress = sf::RectangleShape();
+            auto size = e->getRadius()*1.2;
+
+            bar.setPosition(e->getPosition() + sf::Vector2f(-size/2, size));
+            bar.setSize(sf::Vector2f(size, 4.));
+            bar.setOutlineColor(sf::Color::Transparent);
+            bar.setFillColor(sf::Color(127, 127, 127));
+            window_->draw(bar);
+
+            progress.setPosition(e->getPosition() + sf::Vector2f(-size/2, size));
+            progress.setSize(sf::Vector2f(hpRatio*size, 4.));
+            progress.setOutlineColor(sf::Color::Transparent);
+            progress.setFillColor(sf::Color::Green);
+            window_->draw(progress);
+
+        }
+    }
+    for (auto const& s: world_->tanks) {
+        auto shape = getShape("empty tank");
+        shape->setPosition(s->getPosition());
+        // No rotation: that's a circle
+        window_->draw(*shape);
+    }
+
+    if (not overlayText.empty()) {
+        sf::Text displayedText(overlayText, font, 36);
+        displayedText.setStyle(sf::Text::Bold);
+        displayedText.setFillColor(sf::Color::Black);
+        auto bounds = displayedText.getLocalBounds();
+        displayedText.setPosition(x-bounds.width/2, y-bounds.height);
+        window_->draw(displayedText);
+    }
+
+    window_->display();
+}
+
