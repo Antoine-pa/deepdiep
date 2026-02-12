@@ -71,7 +71,7 @@ bool Entity::collides(const EntityPtr& other) {
 }
 void Entity::hitBy(const EntityPtr& other) {
     hp_ -= other->bodyDamage_;
-    if (hp_<0)
+    if (hp_<=0)
         kill();
 }
 /* --------- Getters/Setters --------------- */
