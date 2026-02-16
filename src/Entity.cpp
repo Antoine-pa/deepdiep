@@ -7,7 +7,7 @@
 #include <random>
 #include <functional>
 
-Entity::Entity(World* world, Entity::Team team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle, int xp) :
+Entity::Entity(World* world, int team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle, int xp) :
     shape_(shape), position_(pos), radius_(radius), team_(team), world_(world)
 {
     setAngle(angle);
@@ -18,7 +18,7 @@ std::random_device rd;
 std::function<int(void)> squareRotationalSpeedGenerator = std::bind(std::uniform_int_distribution<>(-4, 3),  std::mt19937(rd()));
 
 EntityPtr Entity::makeSquare(World* world, float x, float y, float angle) {
-    auto e = std::make_shared<Entity>(world, Entity::Team::ASTEROID, 20.f, View::getShape("square"), sf::Vector2f(x,y), angle, 10);
+    auto e = std::make_shared<Entity>(world, 0 /*=ASTEROID*/, 20.f, View::getShape("square"), sf::Vector2f(x,y), angle, 10);
 
     e->maxHP_ = 3;
     e->hp_ = 3;
@@ -30,23 +30,19 @@ EntityPtr Entity::makeSquare(World* world, float x, float y, float angle) {
 
     return e;
 }
-EntityPtr Entity::makeBullet(World* world, Entity::Team team, float x, float y, float angle) {
-    auto b = std::make_shared<Entity>(world, team, 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0);
-    b->ttl_ = 25;
-    b->speed_ = 27.f;
+// EntityPtr Entity::makeBullet(World* world, int team, float x, float y, float angle) {
+//     auto b = std::make_shared<Entity>(world, team, 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0);
+//     b->speed_ = 27.f;
 
-    b->maxHP_ = 1;
-    b->hp_ = 1;
-    b->bodyDamage_ = 1;
-    return b;
-}
+//     b->maxHP_ = 1;
+//     b->hp_ = 1;
+//     b->bodyDamage_ = 1;
+//     return b;
+// }
 
 void Entity::update(const GameCmd*) {
     if (!alive_)
         return;
-
-    if (ttl_>0 && --ttl_==0) // Ignore negative ttl, and kill objects when their ttl reaches 0
-        kill();
 
     if (rotSpeed_ != 0)
         setAngle(getAngle()+rotSpeed_);
@@ -114,7 +110,7 @@ float Entity::getRadius() const {
 const sf::Vector2f& Entity::getPosition() const {
     return position_;
 }
-Entity::Team Entity::getTeam() const {
+int Entity::getTeam() const {
     return team_;
 }
 bool Entity::isAlive() const {

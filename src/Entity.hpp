@@ -18,14 +18,7 @@ class Entity {
     float angle_; // Don't change it directly; use setAngle() to update direction_ accordingly
     sf::Vector2f direction_; // Only change it through setAngle()
     bool alive_ = true;
-    short ttl_ = -1; // time to live. If negative, infinite
     sf::Shape* shape_;
-
-public:
-    // Objects only collide with the objects of the other teams
-    enum class Team {
-        ASTEROID, PLAYER
-    };
 
 protected:
     /* Entity characteristics that should be set by the class */
@@ -43,15 +36,15 @@ protected:
     float moveY_ = 0;
     float rotSpeed_ = 0;
     float radius_;
-    Entity::Team team_;
+    int team_;
     World* world_;
 public:
-    Entity(World* world, Entity::Team team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle, int xp);
+    Entity(World* world, int team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle, int xp);
     Entity(EntityPtr other) : Entity(*other) {}
     virtual ~Entity() = default;
 
     static EntityPtr makeSquare(World* world, float x, float y, float angle);
-    static EntityPtr makeBullet(World* world, Entity::Team team, float x, float y, float angle);
+    // static EntityPtr makeBullet(World* world, int team, float x, float y, float angle);
 
     virtual void update(const GameCmd* command = nullptr);
     bool collides(const EntityPtr& other);
@@ -69,7 +62,7 @@ public:
     void  setRotSpeed(float rs);
     float getRadius() const;
     sf::Shape* getShape() const;
-    Entity::Team getTeam() const;
+    int getTeam() const;
     float getHPRatio() const;
     bool isAlive() const;
     void kill();
