@@ -31,18 +31,22 @@ protected:
     /* Entity characteristics that should be set by the class */
     float bodyDamage_ = 1;
     float speed_ = 0;
+    float inertia_ = 1;
     float hitRadius_;
     float maxHP_ = 1;
     float hp_ = 1;
     /* End of class-wide constants */
 
+    int xp_ = 0;
     sf::Vector2f position_;
+    float moveX_ = 0;
+    float moveY_ = 0;
     float rotSpeed_ = 0;
     float radius_;
     Entity::Team team_;
     World* world_;
 public:
-    Entity(World* world, Entity::Team team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle);
+    Entity(World* world, Entity::Team team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle, int xp);
     Entity(EntityPtr other) : Entity(*other) {}
     virtual ~Entity() = default;
 
@@ -59,6 +63,8 @@ public:
     const sf::Vector2f& getDirection() const;
     float getSpeed() const;
     void  setSpeed(float s);
+    float getXp() const;
+    void  setXp(float s);
     float getRotSpeed() const;
     void  setRotSpeed(float rs);
     float getRadius() const;
@@ -71,4 +77,5 @@ public:
     bool operator==(const Entity& other) const;
     bool operator!=(const Entity& other) const;
 };
+
 #endif

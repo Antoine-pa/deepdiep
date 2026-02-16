@@ -7,17 +7,18 @@
 #include <random>
 #include <functional>
 
-Entity::Entity(World* world, Entity::Team team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle) :
+Entity::Entity(World* world, Entity::Team team, float radius, sf::Shape* shape, sf::Vector2f pos, float angle, int xp) :
     shape_(shape), position_(pos), radius_(radius), team_(team), world_(world)
 {
     setAngle(angle);
+    setXp(xp);
 }
 
 std::random_device rd;
 std::function<int(void)> squareRotationalSpeedGenerator = std::bind(std::uniform_int_distribution<>(-4, 3),  std::mt19937(rd()));
 
 EntityPtr Entity::makeSquare(World* world, float x, float y, float angle) {
-    auto e = std::make_shared<Entity>(world, Entity::Team::ASTEROID, 20.f, View::getShape("square"), sf::Vector2f(x,y), angle);
+    auto e = std::make_shared<Entity>(world, Entity::Team::ASTEROID, 20.f, View::getShape("square"), sf::Vector2f(x,y), angle, 10);
 
     e->maxHP_ = 3;
     e->hp_ = 3;
@@ -30,7 +31,7 @@ EntityPtr Entity::makeSquare(World* world, float x, float y, float angle) {
     return e;
 }
 EntityPtr Entity::makeBullet(World* world, Entity::Team team, float x, float y, float angle) {
-    auto b = std::make_shared<Entity>(world, team, 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle);
+    auto b = std::make_shared<Entity>(world, team, 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0);
     b->ttl_ = 25;
     b->speed_ = 27.f;
 
@@ -71,8 +72,9 @@ bool Entity::collides(const EntityPtr& other) {
 }
 void Entity::hitBy(const EntityPtr& other) {
     hp_ -= other->bodyDamage_;
-    if (hp_<=0)
+    if (hp_<=0) {
         kill();
+    }
 }
 /* --------- Getters/Setters --------------- */
 float Entity::getAngle() const {
@@ -98,6 +100,12 @@ float Entity::getSpeed() const {
 }
 void  Entity::setSpeed(float s) {
     speed_ = s;
+}
+float Entity::getXp() const {
+    return xp_;
+}
+void  Entity::setXp(float xp) {
+    xp_ = xp;
 }
 
 float Entity::getRadius() const {
