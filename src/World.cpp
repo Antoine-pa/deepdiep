@@ -11,7 +11,6 @@ World::World(int width, int height): width_(width), height_(height) {
     // Bind together uniform distributions on the right intervals with random engines that are seeded with the random_device
     auto randX     = std::bind(std::uniform_int_distribution<>(0, width_-1),  std::mt19937(rd()));
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
-    auto randAngle = std::bind(std::uniform_int_distribution<>(0, 359),       std::mt19937(rd()));
     
     tanks.push_back(tank);
     entities.push_back(tank);
@@ -26,7 +25,7 @@ World::World(int width, int height): width_(width), height_(height) {
         else {
             int rotSpeed = squareRotationalSpeedGenerator();
             rotSpeed += (rotSpeed < 0 ? -3:4);
-            entities.push_back(std::shared_ptr<Entity>(new Asteroid(this, pX, pY, randAngle(), -1, 3, 3, rotSpeed)));
+            entities.push_back(std::shared_ptr<Entity>(new AsteroidSquare(this, pX, pY)));
         }
     }
 }

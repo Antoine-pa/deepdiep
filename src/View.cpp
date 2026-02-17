@@ -32,7 +32,31 @@ void View::initAssets() {
     square->setOutlineThickness(3);
     square->setOrigin(20,20);
     registerShape("square", square);
+    
+    // Create triangles
+    auto triangle = new sf::CircleShape(13.f, 3);
+    triangle->setFillColor(sf::Color::Red);
+    triangle->setOutlineColor(sf::Color(sf::Color::Red.r, sf::Color::Red.g, sf::Color::Red.b, 150));
+    triangle->setOutlineThickness(3);
+    triangle->setOrigin(13,13);
+    registerShape("triangle", triangle);
 
+    // Create pentagons
+    auto pentagon = new sf::CircleShape(30.f, 5);
+    pentagon->setFillColor(sf::Color::Blue);
+    pentagon->setOutlineColor(sf::Color(sf::Color::Blue.r, sf::Color::Blue.g, sf::Color::Blue.b, 150));
+    pentagon->setOutlineThickness(3);
+    pentagon->setOrigin(30,30);
+    registerShape("pentagon", pentagon);
+    
+    // Create hexagons
+    auto hexagon = new sf::CircleShape(40.f, 6);
+    hexagon->setFillColor(sf::Color::Cyan);
+    hexagon->setOutlineColor(sf::Color(sf::Color::Cyan.r, sf::Color::Cyan.g, sf::Color::Cyan.b, 150));
+    hexagon->setOutlineThickness(3);
+    hexagon->setOrigin(40, 40);
+    registerShape("hexagon", hexagon);
+    
     // Bullets
     auto bullet = new sf::CircleShape(2.f, 20);
     bullet->setFillColor(sf::Color::Blue);
