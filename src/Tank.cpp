@@ -7,10 +7,10 @@
 #include <iostream>
 
 
-Tank::Tank(World* world) :
-    Entity(world, 1, 20.f, View::getShape("tank"), sf::Vector2f(0.f, 0.f), 0, 0) {
-    position_.x = radius_ * 2;
-    position_.y = radius_ * 2;
+Tank::Tank(World* world, sf::Vector2f pos) :
+    Entity(world, 1, 20.f, View::getShape("tank"), pos, 0, 0) {
+    position_.x = pos.x;
+    position_.y = pos.y;
     setSpeed(5.f);
     maxHP_ = 8;
     hp_ = 8;
@@ -53,10 +53,14 @@ void Tank::update(const GameCmd* command) {
 
     position_.x += move_.x + impulsion_.x;
     position_.y += move_.y + impulsion_.y;
+    world_->setCameraPos(position_);    // Update position of camera (centered on player)
     if (command->pressFire())
         fire();
-
-    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_;
+    
+    // Mouse relative position after zoom and camera move
+    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos();
+    relMousePos.x -= world_->getWindowWidth() / 2;
+    relMousePos.y -= world_->getWindowHeight() / 2;
 
     auto angle = 0;
     if (relMousePos.x == 0) {

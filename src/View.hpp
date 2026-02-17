@@ -23,5 +23,6 @@ public:
     static void registerShape(std::string name, sf::Shape* shape);
 
     void update(std::string overlayText = "", int x=0, int y=0);
+    World* getWorld();
 };
 #endif

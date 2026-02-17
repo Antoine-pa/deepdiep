@@ -5,6 +5,8 @@
 #include <SFML/Window/Window.hpp>
 
 GameCmd::GameCmd(const sf::Window& relativeTo) {
+    a = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    e = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
     up = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
     down = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
     left = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
@@ -30,4 +32,10 @@ bool GameCmd::pressRight() const {
 }
 bool GameCmd::pressFire() const {
     return fire;
+}
+bool GameCmd::pressA() const {
+    return a;
+}
+bool GameCmd::pressE() const {
+    return e;
 }

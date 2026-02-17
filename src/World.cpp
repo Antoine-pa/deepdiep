@@ -4,13 +4,19 @@
 #include <functional>
 
 
-World::World(int width, int height): width_(width), height_(height) {
-    std::random_device rd;
-    auto tank = std::make_shared<Tank>(this);   // Rajouter la position d'apparition ?
+World::World(int width, int height, int windowWidth, int windowHeight):
+    width_(width), height_(height), windowWidth_(windowWidth), windowHeight_(windowHeight) {
     
+    std::random_device rd;
     // Bind together uniform distributions on the right intervals with random engines that are seeded with the random_device
     auto randX     = std::bind(std::uniform_int_distribution<>(0, width_-1),  std::mt19937(rd()));
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
+
+
+    auto tank = std::make_shared<Tank>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
+    cameraPos_ = tank.get()->getPosition();
+    cameraZoom_ = 1;
+    
     
     tanks.push_back(tank);
     entities.push_back(tank);
@@ -77,3 +83,36 @@ void World::push(EntityPtr e) {
     entities.push_back(e);
 }
 
+sf::Vector2f World::getCameraPos() const {
+    return cameraPos_;
+}
+void World::setCameraPos(sf::Vector2f pos) {
+    cameraPos_ = pos;
+    // Il faut encore vérifier que la caméra s'arête au bord de l'écran si on dépasse (en prenant en compte le zoom)
+    float halfViewW = (windowWidth_ / 2) / cameraZoom_;
+    float halfViewH = (windowHeight_ / 2) / cameraZoom_;
+    if (cameraPos_.x + halfViewW > width_) {
+        cameraPos_.x = width_ - halfViewW;
+    }
+    else if (cameraPos_.x - halfViewW < 0) {
+        cameraPos_.x = halfViewW;
+    }
+    if (cameraPos_.y + halfViewH > height_) {
+        cameraPos_.y = height_ - halfViewH;
+    }
+    else if (cameraPos_.y - halfViewH < 0) {
+        cameraPos_.y = halfViewH;
+    }
+}
+float World::getCameraZoom() const {
+    return cameraZoom_;
+}
+void World::setCameraZoom(float zoom) {
+    cameraZoom_ = zoom;
+}
+int World::getWindowWidth() const {
+    return windowWidth_;
+}
+int World::getWindowHeight() const {
+    return windowHeight_;
+}

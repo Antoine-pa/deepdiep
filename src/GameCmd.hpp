@@ -6,7 +6,7 @@
 
 class GameCmd {
     sf::Vector2i mousePos_;
-    bool up, down, left, right, fire;
+    bool up, down, left, right, fire, a, e;
 public:
     GameCmd(const sf::Window& relativeTo);
 
@@ -16,6 +16,8 @@ public:
     bool pressLeft() const;
     bool pressRight() const;
     bool pressFire() const;
+    bool pressA() const;
+    bool pressE() const;
 };
 
 #endif
