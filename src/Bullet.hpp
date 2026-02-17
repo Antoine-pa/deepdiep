@@ -1,24 +1,27 @@
-// #ifndef INCLUDE_BULLET_HPP
-// #define INCLUDE_BULLET_HPP
+#ifndef INCLUDE_BULLET_HPP
+#define INCLUDE_BULLET_HPP
 
-// #include "Entity.hpp"
-// #include "GameCmd.hpp"
-// #include "Tank.hpp"
+#include "Entity.hpp"
+#include "GameCmd.hpp"
+#include "Tank.hpp"
 
-// #include <math.h>
-// #include <memory>
+#include <math.h>
+#include <memory>
 
-// class World;
-// class Tank;
+class World;
+class Tank;
 
-// class Bullet: public Entity {
-//     short ttl_ = -1; // time to live. If negative, infinite
-//     const Tank* parent_;
 
-// public:
-//     explicit Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl, int bodyDamage);
+class Bullet: public Entity {
+    short ttl_ = -1; // time to live. If negative, infinite
+    Tank* parent_;
 
-//     void update(const GameCmd* command) override;
-// };
+public:
+    explicit Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl, int bodyDamage);
 
-// #endif
+    void update(const GameCmd* command) override;
+};
+
+
+
+#endif

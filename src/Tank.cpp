@@ -1,11 +1,11 @@
 #include "Tank.hpp"
 #include "World.hpp"
 #include "View.hpp"
+#include "Bullet.hpp"
 
 #include <math.h>
 #include <iostream>
 
-class Bullet;
 
 Tank::Tank(World* world) :
     Entity(world, 1, 20.f, View::getShape("tank"), sf::Vector2f(0.f, 0.f), 0, 10) {
@@ -84,8 +84,8 @@ void Tank::update(const GameCmd* command) {
 
 void Tank::fire() {
     if ((int)(world_->getTick()) - last_fire_ >= reload_time_) {
-        Bullet* b = new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), 27.f, 25, 1);
-        world_->push(std::shared_ptr<Entity>(b));
+        world_->push(std::shared_ptr<Entity>(
+            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), 27.f, 25, 1)));
         last_fire_ = world_->getTick();
         
         // Add recoil of weapons 
@@ -98,29 +98,3 @@ void Tank::fire() {
     }
 }
 
-
-
-
-Bullet::Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl, int bodyDamage) :
-    Entity(world, parent->getTeam(), 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0), parent_(parent) {
-    ttl_ = ttl;
-    speed_ = speed;
-    maxHP_ = 1;
-    hp_ = 1;
-    bodyDamage_ = bodyDamage;
-}
-
-void Bullet::update(const GameCmd* command) {
-    
-    (void)(command);
-
-    if (ttl_>0 && --ttl_==0) // Ignore negative ttl, and kill objects when their ttl reaches 0
-        kill();
-    
-    sf::Vector2f distance = getDirection() * speed_;
-    position_ += distance;
-    if (position_.x < -radius_ || position_.x > world_->getWidth() || position_.y < -radius_ || position_.y > world_->getHeight()) {
-        kill();
-    }
-
-}
