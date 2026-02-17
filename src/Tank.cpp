@@ -12,8 +12,8 @@ Tank::Tank(World* world) :
     position_.x = radius_ * 2;
     position_.y = radius_ * 2;
     setSpeed(5.f);
-    maxHP_ = 6;
-    hp_ = 6;
+    maxHP_ = 8;
+    hp_ = 8;
     bodyDamage_ = 2;
 }
 Tank::~Tank() = default;
@@ -28,31 +28,31 @@ void Tank::update(const GameCmd* command) {
     
     if (command->pressUp() || command->pressDown()) {
         if (command->pressDown())
-            moveY_ = moveY_ < speed_ ? moveY_ + inertia_ : speed_;
+            move_.y = move_.y < speed_ ? move_.y + inertia_ : speed_;
         if (command->pressUp())
-            moveY_ = moveY_ > -speed_ ? moveY_ - inertia_ : -speed_;
+            move_.y = move_.y > -speed_ ? move_.y - inertia_ : -speed_;
     }
     else {
-        moveY_ = abs(moveY_) - inertia_ > 0 ? (abs(moveY_) - inertia_) * (moveY_ / abs(moveY_)) : 0;
+        move_.y = abs(move_.y) - inertia_ > 0 ? (abs(move_.y) - inertia_) * (move_.y / abs(move_.y)) : 0;
     }
     if (command->pressLeft() || command->pressRight()) {
         if (command->pressRight())
-            moveX_ = moveX_ < speed_ ? moveX_ + inertia_ : speed_;
+            move_.x = move_.x < speed_ ? move_.x + inertia_ : speed_;
         if (command->pressLeft())
-            moveX_ = moveX_ > -speed_ ? moveX_ - inertia_ : -speed_;
+            move_.x = move_.x > -speed_ ? move_.x - inertia_ : -speed_;
     }
     else {
-        moveX_ = abs(moveX_) - inertia_ > 0 ? (abs(moveX_) - inertia_) * (moveX_ / abs(moveX_)) : 0;
+        move_.x = abs(move_.x) - inertia_ > 0 ? (abs(move_.x) - inertia_) * (move_.x / abs(move_.x)) : 0;
     }
 
     // Decrease impulsion after shoot with the time
-    if (abs(impulsionX_) > 0)
-        impulsionX_ = abs(impulsionX_) - inertia_ / 4 > 0 ? (abs(impulsionX_) - inertia_ / 4) * (impulsionX_ / abs(impulsionX_)) : 0;
-    if (abs(impulsionY_) > 0)
-        impulsionY_ = abs(impulsionY_) - inertia_ / 4 > 0 ? (abs(impulsionY_) - inertia_ / 4) * (impulsionY_ / abs(impulsionY_)) : 0;
+    if (abs(impulsion_.x) > 0)
+        impulsion_.x = abs(impulsion_.x) - inertia_ / 4 > 0 ? (abs(impulsion_.x) - inertia_ / 4) * (impulsion_.x / abs(impulsion_.x)) : 0;
+    if (abs(impulsion_.y) > 0)
+        impulsion_.y = abs(impulsion_.y) - inertia_ / 4 > 0 ? (abs(impulsion_.y) - inertia_ / 4) * (impulsion_.y / abs(impulsion_.y)) : 0;
 
-    position_.x += moveX_ + impulsionX_;
-    position_.y += moveY_ + impulsionY_;
+    position_.x += move_.x + impulsion_.x;
+    position_.y += move_.y + impulsion_.y;
     if (command->pressFire())
         fire();
 
@@ -89,12 +89,12 @@ void Tank::fire() {
         last_fire_ = world_->getTick();
         
         // Add recoil of weapons 
-        impulsionX_ -= 2 * inertia_ * cos(getAngle() * 3.14159f / 180.0f);
-        impulsionY_ -= 2 * inertia_ * sin(getAngle() * 3.14159f / 180.0f);
-        if (abs(impulsionX_) > speed_ / 2)
-            impulsionX_ = speed_  /2 * (impulsionX_ / abs(impulsionX_));
-        if (abs(impulsionY_) > speed_ / 2)
-            impulsionY_ = speed_ / 2 * (impulsionY_ / abs(impulsionY_));
+        impulsion_.x -= 2 * inertia_ * cos(getAngle() * 3.14159f / 180.0f);
+        impulsion_.y -= 2 * inertia_ * sin(getAngle() * 3.14159f / 180.0f);
+        if (abs(impulsion_.x) > speed_ / 2)
+            impulsion_.x = speed_  /2 * (impulsion_.x / abs(impulsion_.x));
+        if (abs(impulsion_.y) > speed_ / 2)
+            impulsion_.y = speed_ / 2 * (impulsion_.y / abs(impulsion_.y));
     }
 }
 

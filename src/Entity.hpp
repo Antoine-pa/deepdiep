@@ -32,8 +32,7 @@ protected:
 
     int xp_ = 0;        // Correspond to the score of the entity or the experience earn after kill the entity
     sf::Vector2f position_;
-    float moveX_ = 0;
-    float moveY_ = 0;
+    sf::Vector2f move_ = sf::Vector2f(0.f, 0.f);
     float rotSpeed_ = 0;
     float radius_;
     int team_;

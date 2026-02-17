@@ -28,8 +28,7 @@ class Tank: public Entity {
     private:
         int reload_time_ = 5;
         int last_fire_ = 0;
-        float impulsionX_ = 0;      // impulsion is the inertia of the shots
-        float impulsionY_ = 0;
+        sf::Vector2f impulsion_ = sf::Vector2f(0.f, 0.f);      // impulsion is the inertia of the shots
 
         int goalScore = 100;
 };

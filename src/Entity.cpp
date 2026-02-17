@@ -46,7 +46,11 @@ void Entity::hitBy(const EntityPtr& other) {
         kill();
         Bullet* b = dynamic_cast<Bullet*>(other.get());
         if (b) {
-            b->getParent()->xp_ += xp_;
+            b->getParent()->addXp(xp_);
+        }
+        Tank* t = dynamic_cast<Tank*>(other.get());
+        if (t) {
+            t->addXp(xp_);
         }
     }
 }
