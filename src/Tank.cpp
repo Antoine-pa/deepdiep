@@ -47,9 +47,9 @@ void Tank::update(const GameCmd* command) {
 
     // Decrease impulsion after shoot with the time
     if (abs(impulsion_.x) > 0)
-        impulsion_.x = abs(impulsion_.x) - inertia_ / 4 > 0 ? (abs(impulsion_.x) - inertia_ / 4) * (impulsion_.x / abs(impulsion_.x)) : 0;
+        impulsion_.x = abs(impulsion_.x) - inertia_ / 6 > 0 ? (abs(impulsion_.x) - inertia_ / 6) * (impulsion_.x / abs(impulsion_.x)) : 0;
     if (abs(impulsion_.y) > 0)
-        impulsion_.y = abs(impulsion_.y) - inertia_ / 4 > 0 ? (abs(impulsion_.y) - inertia_ / 4) * (impulsion_.y / abs(impulsion_.y)) : 0;
+        impulsion_.y = abs(impulsion_.y) - inertia_ / 6 > 0 ? (abs(impulsion_.y) - inertia_ / 6) * (impulsion_.y / abs(impulsion_.y)) : 0;
 
     position_.x += move_.x + impulsion_.x;
     position_.y += move_.y + impulsion_.y;
@@ -89,12 +89,12 @@ void Tank::update(const GameCmd* command) {
 void Tank::fire() {
     if ((int)(world_->getTick()) - last_fire_ >= reload_time_) {
         world_->push(std::shared_ptr<Entity>(
-            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), 27.f, 25, 1)));
+            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), 27.f, 25, 6)));
         last_fire_ = world_->getTick();
         
         // Add recoil of weapons 
-        impulsion_.x -= 2 * inertia_ * cos(getAngle() * 3.14159f / 180.0f);
-        impulsion_.y -= 2 * inertia_ * sin(getAngle() * 3.14159f / 180.0f);
+        impulsion_.x -= inertia_ * cos(getAngle() * 3.14159f / 180.0f);
+        impulsion_.y -= inertia_ * sin(getAngle() * 3.14159f / 180.0f);
         if (abs(impulsion_.x) > speed_ / 2)
             impulsion_.x = speed_  /2 * (impulsion_.x / abs(impulsion_.x));
         if (abs(impulsion_.y) > speed_ / 2)

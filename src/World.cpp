@@ -21,17 +21,22 @@ World::World(int width, int height, int windowWidth, int windowHeight):
     tanks.push_back(tank);
     entities.push_back(tank);
 
-
-    auto squareRotationalSpeedGenerator = std::bind(std::uniform_int_distribution<>(-4, 3),  std::mt19937(rd()));
-    for (int i=0; i < 30; i++) {
+    for (int i=0; i < width * height / 20000; i++) {
         int pX = randX(), pY = randY();
         if ((pX-tank.get()->getPosition().x)*(pX-tank.get()->getPosition().x) + (pY-tank.get()->getPosition().y)*(pY-tank.get()->getPosition().y) < tank.get()->getRadius() * tank.get()->getRadius() * 16) {
             i--;
         }
         else {
-            int rotSpeed = squareRotationalSpeedGenerator();
-            rotSpeed += (rotSpeed < 0 ? -3:4);
-            entities.push_back(std::shared_ptr<Entity>(new AsteroidSquare(this, pX, pY)));
+            int asteroidType = std::bind(std::uniform_int_distribution<>(0, 100),  std::mt19937(rd()))();
+            if (asteroidType < 50) {
+                entities.push_back(std::shared_ptr<Entity>(new AsteroidSquare(this, pX, pY)));
+            } else if (asteroidType < 80) {
+                entities.push_back(std::shared_ptr<Entity>(new AsteroidTriangle(this, pX, pY)));
+            } else if (asteroidType < 98) {
+                entities.push_back(std::shared_ptr<Entity>(new AsteroidPentagon(this, pX, pY)));
+            } else {
+                entities.push_back(std::shared_ptr<Entity>(new AsteroidHexagon(this, pX, pY)));
+            }
         }
     }
 }
