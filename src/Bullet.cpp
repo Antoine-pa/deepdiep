@@ -27,3 +27,7 @@ void Bullet::update(const GameCmd* command) {
 
     Entity::update(command);
 }
+
+Tank* Bullet::getParent() {
+    return parent_;
+}

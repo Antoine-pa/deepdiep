@@ -30,7 +30,7 @@ protected:
     float hp_ = 1;
     /* End of class-wide constants */
 
-    int xp_ = 0;
+    int xp_ = 0;        // Correspond to the score of the entity or the experience earn after kill the entity
     sf::Vector2f position_;
     float moveX_ = 0;
     float moveY_ = 0;
@@ -57,7 +57,7 @@ public:
     float getSpeed() const;
     void  setSpeed(float s);
     float getXp() const;
-    void  setXp(float s);
+    void  addXp(float s);
     float getRotSpeed() const;
     void  setRotSpeed(float rs);
     float getRadius() const;

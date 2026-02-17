@@ -8,7 +8,7 @@
 
 
 Tank::Tank(World* world) :
-    Entity(world, 1, 20.f, View::getShape("tank"), sf::Vector2f(0.f, 0.f), 0, 10) {
+    Entity(world, 1, 20.f, View::getShape("tank"), sf::Vector2f(0.f, 0.f), 0, 0) {
     position_.x = radius_ * 2;
     position_.y = radius_ * 2;
     setSpeed(5.f);
@@ -98,3 +98,9 @@ void Tank::fire() {
     }
 }
 
+int Tank::getGoalScore() {
+    return goalScore;
+}
+void Tank::setGoalScore(int newGS) {
+    goalScore = newGS;
+}

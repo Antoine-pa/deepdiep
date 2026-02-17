@@ -21,12 +21,17 @@ class Tank: public Entity {
 
         int getReloadTime();
         void setReloadTime(int reload);
+
+        int getGoalScore();
+        void setGoalScore(int newGS);
     
     private:
         int reload_time_ = 5;
         int last_fire_ = 0;
         float impulsionX_ = 0;      // impulsion is the inertia of the shots
         float impulsionY_ = 0;
+
+        int goalScore = 100;
 };
 
 #endif

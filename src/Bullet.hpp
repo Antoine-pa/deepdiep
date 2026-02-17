@@ -20,6 +20,7 @@ public:
     explicit Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl, int bodyDamage);
 
     void update(const GameCmd* command) override;
+    Tank* getParent();
 };
 
 

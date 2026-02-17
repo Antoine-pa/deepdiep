@@ -11,7 +11,7 @@ Entity::Entity(World* world, int team, float radius, sf::Shape* shape, sf::Vecto
     shape_(shape), position_(pos), radius_(radius), team_(team), world_(world)
 {
     setAngle(angle);
-    setXp(xp);
+    xp_ = xp;
 }
 
 std::random_device rd;
@@ -44,6 +44,10 @@ void Entity::hitBy(const EntityPtr& other) {
     hp_ -= other->bodyDamage_;
     if (hp_<=0) {
         kill();
+        Bullet* b = dynamic_cast<Bullet*>(other.get());
+        if (b) {
+            b->getParent()->xp_ += xp_;
+        }
     }
 }
 /* --------- Getters/Setters --------------- */
@@ -74,8 +78,8 @@ void  Entity::setSpeed(float s) {
 float Entity::getXp() const {
     return xp_;
 }
-void  Entity::setXp(float xp) {
-    xp_ = xp;
+void  Entity::addXp(float xp) {
+    xp_ += xp;
 }
 
 float Entity::getRadius() const {
