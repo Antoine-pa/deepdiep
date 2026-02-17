@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message("On need, see https://www.sfml-dev.org/tutorials/2.5/ to install SFML on your system.")
 find_package(SFML 2 REQUIRED system window graphics)
 
-add_executable(deepdiep src/Entity.cpp src/Entity.hpp src/Tank.cpp src/Tank.hpp src/Bullet.cpp src/Bullet.hpp
+add_executable(deepdiep src/Entity.cpp src/Entity.hpp src/Tank.cpp src/Tank.hpp src/Bullet.cpp src/Bullet.hpp src/Asteroid.cpp src/Asteroid.hpp
                         src/Game.cpp src/Game.hpp src/GameCmd.cpp src/GameCmd.hpp
                         src/View.cpp src/View.hpp
                         src/World.cpp src/World.hpp

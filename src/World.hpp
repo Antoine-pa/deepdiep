@@ -3,6 +3,8 @@
 
 #include "Entity.hpp"
 #include "Tank.hpp"
+#include "Bullet.hpp"
+#include "Asteroid.hpp"
 
 class View;
 

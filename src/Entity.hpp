@@ -43,7 +43,7 @@ public:
     Entity(EntityPtr other) : Entity(*other) {}
     virtual ~Entity() = default;
 
-    static EntityPtr makeSquare(World* world, float x, float y, float angle);
+    // static EntityPtr makeSquare(World* world, float x, float y, float angle);
     // static EntityPtr makeBullet(World* world, int team, float x, float y, float angle);
 
     virtual void update(const GameCmd* command = nullptr);

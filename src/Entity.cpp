@@ -15,30 +15,6 @@ Entity::Entity(World* world, int team, float radius, sf::Shape* shape, sf::Vecto
 }
 
 std::random_device rd;
-std::function<int(void)> squareRotationalSpeedGenerator = std::bind(std::uniform_int_distribution<>(-4, 3),  std::mt19937(rd()));
-
-EntityPtr Entity::makeSquare(World* world, float x, float y, float angle) {
-    auto e = std::make_shared<Entity>(world, 0 /*=ASTEROID*/, 20.f, View::getShape("square"), sf::Vector2f(x,y), angle, 10);
-
-    e->maxHP_ = 3;
-    e->hp_ = 3;
-    e->bodyDamage_ = 3;
-
-    // Cosmetics : get the square to dance in place :)
-    e->rotSpeed_ = squareRotationalSpeedGenerator(); // First get something in [-4;3]
-    e->rotSpeed_ += (e->rotSpeed_<0 ? -3:4); // Change it into something in [-8;-4] or [4;8] but not in between
-
-    return e;
-}
-// EntityPtr Entity::makeBullet(World* world, int team, float x, float y, float angle) {
-//     auto b = std::make_shared<Entity>(world, team, 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0);
-//     b->speed_ = 27.f;
-
-//     b->maxHP_ = 1;
-//     b->hp_ = 1;
-//     b->bodyDamage_ = 1;
-//     return b;
-// }
 
 void Entity::update(const GameCmd*) {
     if (!alive_)
@@ -47,8 +23,6 @@ void Entity::update(const GameCmd*) {
     if (rotSpeed_ != 0)
         setAngle(getAngle()+rotSpeed_);
 
-    sf::Vector2f distance = direction_ * speed_;
-    position_ += distance;
     if (position_.x < -radius_ || position_.x > world_->getWidth() || position_.y < -radius_ || position_.y > world_->getHeight()) {
         kill();
     }

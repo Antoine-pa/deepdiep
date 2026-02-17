@@ -19,15 +19,11 @@ Bullet::Bullet(World* world, Tank* parent, float x, float y, float angle, float 
 
 void Bullet::update(const GameCmd* command) {
     
-    (void)(command);
-
     if (ttl_>0 && --ttl_==0) // Ignore negative ttl, and kill objects when their ttl reaches 0
         kill();
     
     sf::Vector2f distance = getDirection() * speed_;
     position_ += distance;
-    if (position_.x < -radius_ || position_.x > world_->getWidth() || position_.y < -radius_ || position_.y > world_->getHeight()) {
-        kill();
-    }
 
+    Entity::update(command);
 }

@@ -3,21 +3,32 @@
 #include <random>
 #include <functional>
 
+
 World::World(int width, int height): width_(width), height_(height) {
     std::random_device rd;
-    auto tank = std::make_shared<Tank>(this);
+    auto tank = std::make_shared<Tank>(this);   // Rajouter la position d'apparition ?
     
     // Bind together uniform distributions on the right intervals with random engines that are seeded with the random_device
-    auto randX     = std::bind(std::uniform_int_distribution<>(tank->getRadius() * 4, width_-1),  std::mt19937(rd()));
-    auto randY     = std::bind(std::uniform_int_distribution<>(tank->getRadius() * 4, height_-1), std::mt19937(rd()));
+    auto randX     = std::bind(std::uniform_int_distribution<>(0, width_-1),  std::mt19937(rd()));
+    auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
     auto randAngle = std::bind(std::uniform_int_distribution<>(0, 359),       std::mt19937(rd()));
     
     tanks.push_back(tank);
     entities.push_back(tank);
 
-    for (int i=0; i < 30; i++)
-        entities.push_back(Entity::makeSquare(this, randX(), randY(), randAngle()));
 
+    auto squareRotationalSpeedGenerator = std::bind(std::uniform_int_distribution<>(-4, 3),  std::mt19937(rd()));
+    for (int i=0; i < 30; i++) {
+        int pX = randX(), pY = randY();
+        if ((pX-tank.get()->getPosition().x)*(pX-tank.get()->getPosition().x) + (pY-tank.get()->getPosition().y)*(pY-tank.get()->getPosition().y) < tank.get()->getRadius() * tank.get()->getRadius() * 16) {
+            i--;
+        }
+        else {
+            int rotSpeed = squareRotationalSpeedGenerator();
+            rotSpeed += (rotSpeed < 0 ? -3:4);
+            entities.push_back(std::shared_ptr<Entity>(new Asteroid(this, pX, pY, randAngle(), -1, 3, 3, rotSpeed)));
+        }
+    }
 }
 
 void World::update(const GameCmd& cmd) {
