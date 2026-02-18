@@ -1,4 +1,4 @@
-ajouter tout les players en safe zone
+ajouter tout les players en safe zone -> faire une fonction spawn_player pour ajouter des players au monde
 split les commandes pour jouer à plusieurs -> changer la gestion des commandes
 faire des changements qualitatifs sur les tanks (rajouter des tanks)
 ajouter les objets incassables avec rebondissement des balles
