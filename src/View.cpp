@@ -81,6 +81,22 @@ void View::initAssets() {
     emptyTank->setOrigin(12,12);
     registerShape("empty tank", emptyTank);
 
+    // Destroyer
+    auto destroyer = new sf::RectangleShape(sf::Vector2f(28 ,16));
+    destroyer->setFillColor(sf::Color(115, 115, 115));
+    destroyer->setOutlineColor(sf::Color(38, 38, 38));
+    destroyer->setOrigin(-14,8);
+    destroyer->setOutlineThickness(1);
+    registerShape("destroyer", destroyer);
+
+    // Empty Destroyer
+    auto emptyDestroyer = new sf::CircleShape(18.f, 20);
+    emptyDestroyer->setFillColor(sf::Color(255, 191, 128));
+    emptyDestroyer->setOutlineColor(sf::Color(255, 153, 51));
+    emptyDestroyer->setOutlineThickness(5);
+    emptyDestroyer->setOrigin(18,18);
+    registerShape("empty destroyer", emptyDestroyer);
+
     // horizontal grid element
     auto hline = new sf::RectangleShape(sf::Vector2f(0, 2000));
     hline->setFillColor(sf::Color(145, 145, 145));
@@ -155,7 +171,7 @@ void View::update(std::string overlayText, int x, int y) {
         }
     }
     for (auto const& s: world_->tanks) {
-        auto shape = getShape("empty tank");
+        auto shape = s->getEmptyShape();
         shape->setPosition((s->getPosition() - padding) * zoom + offset);
         // No rotation: that's a circle
         shape->setScale(world_.get()->getCameraZoom(), world_.get()->getCameraZoom());

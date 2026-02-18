@@ -61,6 +61,7 @@ public:
     void  setRotSpeed(float rs);
     float getRadius() const;
     sf::Shape* getShape() const;
+    void setShape(sf::Shape* shape);
     int getTeam() const;
     float getHPRatio() const;
     bool isAlive() const;

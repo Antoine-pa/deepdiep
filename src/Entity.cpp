@@ -105,6 +105,11 @@ float Entity::getHPRatio() const {
 sf::Shape* Entity::getShape() const {
     return shape_;
 }
+
+void Entity::setShape(sf::Shape* shape) {
+    shape_ = shape;
+}
+
 void Entity::kill() {
     alive_ = false;
 }

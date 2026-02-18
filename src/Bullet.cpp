@@ -8,13 +8,13 @@
 
 
 
-Bullet::Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl, int bodyDamage) :
+Bullet::Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl) :
     Entity(world, parent->getTeam(), 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0), parent_(parent) {
     ttl_ = ttl;
     speed_ = speed;
     maxHP_ = 1;
     hp_ = 1;
-    bodyDamage_ = bodyDamage;
+    bodyDamage_ = parent->getDamage();
 }
 
 void Bullet::update(const GameCmd* command) {

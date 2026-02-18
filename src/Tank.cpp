@@ -14,7 +14,7 @@ Tank::Tank(World* world, sf::Vector2f pos) :
     setSpeed(5.f);
     maxHP_ = 8;
     hp_ = 8;
-    bodyDamage_ = 2;
+    empty_shape_ = View::getShape("empty tank");
 }
 Tank::~Tank() = default;
 
@@ -88,7 +88,7 @@ void Tank::update(const GameCmd* command) {
 void Tank::fire() {
     if ((int)(world_->getTick()) - last_fire_ >= reload_time_) {
         world_->push(std::shared_ptr<Entity>(
-            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), 27.f, 25, 6)));
+            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), 27.f, 25)));
         last_fire_ = world_->getTick();
         
         // Add recoil of weapons 
@@ -107,3 +107,27 @@ int Tank::getGoalScore() {
 void Tank::setGoalScore(int newGS) {
     goalScore = newGS;
 }
+
+int Tank::getDamage() {
+    return damage_;
+}
+void Tank::setDamage(int newDamage) {
+    damage_ = newDamage;
+}
+
+sf::Shape* Tank::getEmptyShape() {
+    return empty_shape_;
+}
+void Tank::setEmptyShape(sf::Shape* shape) {
+    empty_shape_ = shape;
+}
+
+Destroyer::Destroyer(World* world, sf::Vector2f pos) :
+    Tank(world, pos) {
+        damage_ *= 2;
+        reload_time_ *= 2;
+        setShape(View::getShape("destroyer"));
+        setEmptyShape(View::getShape("empty destroyer"));
+    }
+
+Destroyer::~Destroyer() = default;
