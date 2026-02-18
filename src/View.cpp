@@ -107,7 +107,8 @@ sf::Shape* View::getShape(std::string name) {
 void View::update(std::string overlayText, int x, int y) {
     window_->clear(sf::Color(225, 225, 225));
 
-    sf::Vector2f padding = world_.get()->cameraPos_;
+    // Si le tank est mort on va en (0, 0) ?
+    sf::Vector2f padding = world_.get()->tanks.empty() ? sf::Vector2f(0, 0) : world_.get()->getCameraPos(world_.get()->tanks.at(0).get()->getPosition());
     sf::Vector2f offset = sf::Vector2f(world_.get()->windowWidth_ / 2, world_.get()->windowHeight_ / 2);
     float zoom = world_.get()->getCameraZoom();
 

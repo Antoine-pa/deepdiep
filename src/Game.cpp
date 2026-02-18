@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "World.hpp"
-#include "View.hpp"
+#include "Layout.hpp"
 #include "GameCmd.hpp"
 #include <iostream>
 
@@ -13,7 +13,7 @@ Game::Game() : window_(std::make_shared<sf::RenderWindow>(sf::VideoMode(width, h
 
 int Game::run() {
     auto world = std::make_shared<World>(2000, 2000, width, heigth);
-    View view(world, window_);
+    Layout layout(world, window_);
     sf::Clock clock;
 
     while (world->running() && window_->isOpen()) {
@@ -35,7 +35,7 @@ int Game::run() {
 
         // Display the world state, but only if we did not run out of time for this frame
         if (clock.getElapsedTime() < sf::milliseconds(30000))
-            view.update();
+            layout.update();
         else
             std::cout << "Skipping frame rendering!\n";
 
@@ -49,7 +49,7 @@ int Game::run() {
         std::string outcome = world->getStringOutcome();
         bool done = false;
         while (not done) {
-            view.update(outcome, world->getWidth()/2, world->getHeight()/2);
+            layout.update(outcome, world->getWidth()/2, world->getHeight()/2);
             sf::Event event;
             while (window_->pollEvent(event))
                 if (event.type == sf::Event::KeyPressed)

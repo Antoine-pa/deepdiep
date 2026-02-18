@@ -34,8 +34,7 @@ public:
     std::string getStringOutcome();
     void push(EntityPtr e);
 
-    sf::Vector2f getCameraPos() const;
-    void setCameraPos(sf::Vector2f pos);
+    sf::Vector2f getCameraPos(sf::Vector2f tankPos) const;
     float getCameraZoom() const;
     void setCameraZoom(float zoom);
     int getWindowWidth() const;

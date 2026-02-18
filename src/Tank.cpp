@@ -23,7 +23,7 @@ void Tank::setReloadTime(int reload) { reload_time_ = reload; }
 
 void Tank::update(const GameCmd* command) {
 
-    if (command == nullptr)
+    if (command == nullptr) // Call two times each tick, one with this argument
         return;
     
     if (command->pressUp() || command->pressDown()) {
@@ -53,12 +53,11 @@ void Tank::update(const GameCmd* command) {
 
     position_.x += move_.x + impulsion_.x;
     position_.y += move_.y + impulsion_.y;
-    world_->setCameraPos(position_);    // Update position of camera (centered on player)
     if (command->pressFire())
         fire();
     
     // Mouse relative position after zoom and camera move
-    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos();
+    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos(position_);
     relMousePos.x -= world_->getWindowWidth() / 2;
     relMousePos.y -= world_->getWindowHeight() / 2;
 

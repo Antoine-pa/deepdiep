@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 class View {
+
     std::shared_ptr<World> world_;
     std::shared_ptr<sf::RenderWindow> window_;
 

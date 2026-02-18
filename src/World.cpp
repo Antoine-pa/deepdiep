@@ -88,26 +88,23 @@ void World::push(EntityPtr e) {
     entities.push_back(e);
 }
 
-sf::Vector2f World::getCameraPos() const {
-    return cameraPos_;
-}
-void World::setCameraPos(sf::Vector2f pos) {
-    cameraPos_ = pos;
+sf::Vector2f World::getCameraPos(sf::Vector2f tankPos) const {
     // Il faut encore vérifier que la caméra s'arête au bord de l'écran si on dépasse (en prenant en compte le zoom)
     float halfViewW = (windowWidth_ / 2) / cameraZoom_;
     float halfViewH = (windowHeight_ / 2) / cameraZoom_;
-    if (cameraPos_.x + halfViewW > width_) {
-        cameraPos_.x = width_ - halfViewW;
+    if (tankPos.x + halfViewW > width_) {
+        tankPos.x = width_ - halfViewW;
     }
-    else if (cameraPos_.x - halfViewW < 0) {
-        cameraPos_.x = halfViewW;
+    else if (tankPos.x - halfViewW < 0) {
+        tankPos.x = halfViewW;
     }
-    if (cameraPos_.y + halfViewH > height_) {
-        cameraPos_.y = height_ - halfViewH;
+    if (tankPos.y + halfViewH > height_) {
+        tankPos.y = height_ - halfViewH;
     }
-    else if (cameraPos_.y - halfViewH < 0) {
-        cameraPos_.y = halfViewH;
+    else if (tankPos.y - halfViewH < 0) {
+        tankPos.y = halfViewH;
     }
+    return tankPos;
 }
 float World::getCameraZoom() const {
     return cameraZoom_;
