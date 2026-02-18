@@ -45,8 +45,8 @@ void Tank::update(const GameCmd* command) {
         move_.x = abs(move_.x) - inertia_ > 0 ? (abs(move_.x) - inertia_) * (move_.x / abs(move_.x)) : 0;
     }
 
-    if (command->pressA()) zoom_ - 0.03;
-    if (command->pressE()) zoom_ + 0.03;
+    if (command->pressA()) zoom_ -= 0.03;
+    if (command->pressE()) zoom_ += 0.03;
 
     // Decrease impulsion after shoot with the time
     if (abs(impulsion_.x) > 0)
