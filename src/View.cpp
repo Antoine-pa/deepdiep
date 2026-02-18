@@ -121,11 +121,8 @@ sf::Shape* View::getShape(std::string name) {
 }
 
 void View::update(Tank* tank, std::string overlayText, int x, int y) {
-    window_->clear(sf::Color(225, 225, 225));
-
     sf::View view = tank->getViewport();
-    view.setCenter(world_.get()->getCameraPos(tank));
-    view.setSize(sf::Vector2f(world_.get()->windowWidth_ * view.getViewport().width, world_.get()->windowHeight_ * view.getViewport().height));
+    view.setCenter(world_->getCameraPos(tank));
     window_->setView(view);
 
     // Draw a grid
@@ -184,17 +181,17 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
     // Drawing score bar
     auto bar = sf::RectangleShape();
     auto progress = sf::RectangleShape();
-    auto size = world_.get()->getWindowWidth() / 2;
+    auto size = world_->getWindowWidth() / 2;
     auto ratio = tank->getXp() / tank->getGoalScore();
     ratio = ratio > 1 ? 1 : ratio;
 
-    bar.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
+    bar.setPosition(sf::Vector2f((world_->getWindowWidth() - size) / 2, world_->getWindowHeight() - 20));
     bar.setSize(sf::Vector2f(size, 10.));
     bar.setOutlineColor(sf::Color::Transparent);
     bar.setFillColor(sf::Color(127, 127, 127));
     window_->draw(bar);
     
-    progress.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
+    progress.setPosition(sf::Vector2f((world_->getWindowWidth() - size) / 2, world_->getWindowHeight() - 20));
     progress.setSize(sf::Vector2f(size * ratio, 10.));
     progress.setOutlineColor(sf::Color::Transparent);
     progress.setFillColor(sf::Color::Green);

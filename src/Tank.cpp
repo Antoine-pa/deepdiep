@@ -132,6 +132,9 @@ sf::View Tank::getViewport() {
 void Tank::setViewport(sf::View viewport) {
     viewport_ = viewport;
 }
+void Tank::setViewportSize(sf::Vector2f worldSize) {
+    viewport_.setSize(sf::Vector2f(worldSize.x * viewport_.getViewport().width, worldSize.y * viewport_.getViewport().height));
+}
 sf::Vector2f Tank::getRelativeMousePos(sf::Vector2i mousePos) {
     sf::Vector2f result = sf::Vector2f(mousePos.x, mousePos.y);
     result -= sf::Vector2f(world_->getWindowWidth() * viewport_.getViewport().left, world_->getWindowHeight() * viewport_.getViewport().top);

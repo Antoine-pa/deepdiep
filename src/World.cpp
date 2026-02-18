@@ -13,9 +13,12 @@ World::World(int width, int height, int windowWidth, int windowHeight):
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
 
     auto tank = std::make_shared<Destroyer>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
+    auto tank2 = std::make_shared<Destroyer>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
     
     tanks.push_back(tank);
+    tanks.push_back(tank2);
     entities.push_back(tank);
+    entities.push_back(tank2);
 
     for (int i=0; i < width * height / 20000; i++) {
         int pX = randX(), pY = randY();

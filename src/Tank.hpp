@@ -38,7 +38,9 @@ class Tank: public Entity {
 
         sf::View getViewport();
         void setViewport(sf::View viewport);
+        void setViewportSize(sf::Vector2f worldSize);
         sf::Vector2f getRelativeMousePos(sf::Vector2i mousePos);
+
     protected:
         int reload_time_ = 5;
         int damage_ = 1;
