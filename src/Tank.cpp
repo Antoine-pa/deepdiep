@@ -60,9 +60,7 @@ void Tank::update(const GameCmd* command) {
         fire();
     
     // Mouse relative position after zoom and camera move
-    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos(this);
-    relMousePos.x -= world_->getWindowWidth() / 2;
-    relMousePos.y -= world_->getWindowHeight() / 2;
+    auto relMousePos = getRelativeMousePos(command->getMousePos());
 
     auto angle = 0;
     if (relMousePos.x == 0) {
@@ -134,7 +132,13 @@ sf::View Tank::getViewport() {
 void Tank::setViewport(sf::View viewport) {
     viewport_ = viewport;
 }
-
+sf::Vector2f Tank::getRelativeMousePos(sf::Vector2i mousePos) {
+    sf::Vector2f result = sf::Vector2f(mousePos.x, mousePos.y);
+    result -= sf::Vector2f(world_->getWindowWidth() * viewport_.getViewport().left, world_->getWindowHeight() * viewport_.getViewport().top);
+    result -= sf::Vector2f(world_->getWindowWidth() * viewport_.getViewport().width / 2, world_->getWindowHeight() * viewport_.getViewport().height / 2);
+    result += world_->getCameraPos(this) - position_;
+    return result;
+}
 
 
 
