@@ -7,8 +7,8 @@
 #include <iostream>
 
 
-Tank::Tank(World* world, sf::Vector2f pos) :
-    Entity(world, 1, 20.f, View::getShape("tank"), pos, 0, 0) {
+Tank::Tank(World* world, sf::Vector2f pos, int team) :
+    Entity(world, team, 20.f, View::getShape("tank"), pos, 0, 0) {
     position_.x = pos.x;
     position_.y = pos.y;
     setSpeed(5.f);
@@ -147,8 +147,8 @@ sf::Vector2f Tank::getRelativeMousePos(sf::Vector2i mousePos) {
 
 
 
-Destroyer::Destroyer(World* world, sf::Vector2f pos) :
-    Tank(world, pos) {
+Destroyer::Destroyer(World* world, sf::Vector2f pos, int team) :
+    Tank(world, pos, team) {
         damage_ *= 2;
         reload_time_ *= 2;
         setShape(View::getShape("destroyer"));

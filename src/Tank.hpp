@@ -17,7 +17,7 @@ class Bullet;
 class Tank: public Entity {
     
     public:
-        explicit Tank(World* world, sf::Vector2f pos);
+        explicit Tank(World* world, sf::Vector2f pos, int team);
         ~Tank();
 
         void fire();
@@ -56,7 +56,7 @@ class Tank: public Entity {
 
 class Destroyer: public Tank {
     public:
-        explicit Destroyer(World* world, sf::Vector2f pos);
+        explicit Destroyer(World* world, sf::Vector2f pos, int team);
         ~Destroyer();
 };
 

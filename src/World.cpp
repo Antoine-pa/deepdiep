@@ -12,17 +12,14 @@ World::World(int width, int height, int windowWidth, int windowHeight):
     auto randX     = std::bind(std::uniform_int_distribution<>(0, width_-1),  std::mt19937(rd()));
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
 
-    auto tank = std::make_shared<Destroyer>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
-    auto tank2 = std::make_shared<Destroyer>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
+    auto tank = std::make_shared<Tank>(this, sf::Vector2f(randX(), randY()), 1);
     
     tanks.push_back(tank);
-    tanks.push_back(tank2);
     entities.push_back(tank);
-    entities.push_back(tank2);
 
     for (int i=0; i < width * height / 20000; i++) {
         int pX = randX(), pY = randY();
-        if ((pX-tank.get()->getPosition().x)*(pX-tank.get()->getPosition().x) + (pY-tank.get()->getPosition().y)*(pY-tank.get()->getPosition().y) < tank.get()->getRadius() * tank.get()->getRadius() * 16) {
+        if ((pX-tank->getPosition().x)*(pX-tank->getPosition().x) + (pY-tank->getPosition().y)*(pY-tank->getPosition().y) < tank->getRadius() * tank->getRadius() * 16) {
             i--;
         }
         else {
@@ -107,6 +104,31 @@ sf::Vector2f World::getCameraPos(Tank* tank) const {
         tankPos.y = halfViewH;
     }
     return tankPos;
+}
+
+std::shared_ptr<Tank> World::spawnPlayer(int team) {
+    std::random_device rd;
+    auto randX     = std::bind(std::uniform_int_distribution<>(0, width_-1),  std::mt19937(rd()));
+    auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
+
+    auto tank = std::make_shared<Tank>(this, sf::Vector2f(randX(), randY()), team);
+
+    // The distance with the nearest ennemy need to be high
+    for (auto &t : tanks) {
+        if (t->getTeam() != team) {
+            if ((t->getPosition().x-tank->getPosition().x)*(t->getPosition().x-tank->getPosition().x) + (t->getPosition().y-tank->getPosition().y)*(t->getPosition().y-tank->getPosition().y) < tank->getRadius() * tank->getRadius() * 64) {
+                return spawnPlayer(team);
+            }
+        }
+    }
+    for (auto &e : entities) {
+        if ((e->getPosition().x-tank->getPosition().x)*(e->getPosition().x-tank->getPosition().x) + (e->getPosition().y-tank->getPosition().y)*(e->getPosition().y-tank->getPosition().y) < tank->getRadius() * tank->getRadius() * 16) {
+            e->kill();
+        }
+    }
+    tanks.push_back(tank);
+    entities.push_back(tank);
+    return std::shared_ptr<Tank>(tank);
 }
 
 int World::getWindowWidth() const {

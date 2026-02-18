@@ -34,6 +34,8 @@ public:
     std::string getStringOutcome();
     void push(EntityPtr e);
 
+    std::shared_ptr<Tank> spawnPlayer(int team);
+
     sf::Vector2f getCameraPos(Tank* tank) const;
     
     int getWindowWidth() const;

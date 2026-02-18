@@ -14,15 +14,14 @@ Layout::Layout(std::shared_ptr<World> world, std::shared_ptr<sf::RenderWindow> w
         views_[4].setViewport(sf::FloatRect(0., 0.5, 0.5, 0.5));
         views_[5].setViewport(sf::FloatRect(0.5, 0., 0.5, 0.5));
         views_[6].setViewport(sf::FloatRect(0.5, 0.5, 0.5, 0.5));
-        addPlayerToLayout(world.get()->tanks[0]);
-        addPlayerToLayout(world.get()->tanks[1]);
+        addPlayerToLayout(world->tanks[0]);
     }
 
 void Layout::update(std::string overlayText, int x, int y) {
-    window_.get()->clear(sf::Color(225, 225, 225));
+    window_->clear(sf::Color(225, 225, 225));
     for (auto &player : players_)
         View::update(player.get(), overlayText, x, y);
-    window_.get()->display();
+    window_->display();
 }
 
 void Layout::addPlayerToLayout(std::shared_ptr<Tank> player) {
