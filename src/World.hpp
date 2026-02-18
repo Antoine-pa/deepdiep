@@ -15,8 +15,14 @@ class World {
     unsigned long tick_ = 0;
     int width_;
     int height_;
+
+    int windowWidth_;
+    int windowHeight_;
+    sf::Vector2f cameraPos_;
+    float cameraZoom_;
+
 public:
-    World(int width, int height);
+    World(int width, int height, int windowWidth, int windowHeight);
     int getWidth() { return width_;}
     int getHeight() { return height_;}
     unsigned long getTick() {return tick_;}
@@ -27,6 +33,13 @@ public:
     void stop() {running_ = false;}
     std::string getStringOutcome();
     void push(EntityPtr e);
+
+    sf::Vector2f getCameraPos() const;
+    void setCameraPos(sf::Vector2f pos);
+    float getCameraZoom() const;
+    void setCameraZoom(float zoom);
+    int getWindowWidth() const;
+    int getWindowHeight() const;
 
 private:
     std::vector<std::shared_ptr<Tank>> tanks; // Active entities, that must be passed a GameControl when updating

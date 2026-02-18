@@ -32,7 +32,7 @@ void Asteroid::update(const GameCmd* command) {
 
 std::random_device rnd;
 AsteroidSquare::AsteroidSquare(World* world, float x, float y) :
-    Asteroid(world, x, y, View::getShape("triangle"), 0, -1, 10 /*HP*/, 8 /*Damage*/, 0, 10 /*XP*/) {
+    Asteroid(world, x, y, View::getShape("square"), 0, -1, 10 /*HP*/, 8 /*Damage*/, 0, 10 /*XP*/) {
 
     auto squareRotationalSpeedGenerator = std::bind(std::uniform_int_distribution<>(-4, 3),  std::mt19937(rnd()));
     int rotSpeed = squareRotationalSpeedGenerator();

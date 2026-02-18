@@ -98,13 +98,13 @@ void View::initAssets() {
     registerShape("empty destroyer", emptyDestroyer);
 
     // horizontal grid element
-    auto hline = new sf::RectangleShape(sf::Vector2f(0,1000));
+    auto hline = new sf::RectangleShape(sf::Vector2f(0, 2000));
     hline->setFillColor(sf::Color(145, 145, 145));
     hline->setOutlineColor(sf::Color(145, 145, 145));
     hline->setOutlineThickness(1);
     registerShape("hline", hline);
     auto vline = new sf::RectangleShape(*hline);
-    vline->setSize(sf::Vector2f(1000,0));
+    vline->setSize(sf::Vector2f(2000, 0));
     registerShape("vline", vline);
 }
 
@@ -123,22 +123,29 @@ sf::Shape* View::getShape(std::string name) {
 void View::update(std::string overlayText, int x, int y) {
     window_->clear(sf::Color(225, 225, 225));
 
+    sf::Vector2f padding = world_.get()->cameraPos_;
+    sf::Vector2f offset = sf::Vector2f(world_.get()->windowWidth_ / 2, world_.get()->windowHeight_ / 2);
+    float zoom = world_.get()->getCameraZoom();
+
     // Draw a grid
     auto hline = getShape("hline");
     for (int i=0; i<world_->getWidth();i += 50) {
-        hline->setPosition(sf::Vector2f(i,0));
+        hline->setPosition((sf::Vector2f(i,0) - padding) * zoom + offset);
+        hline->setScale(zoom, zoom);
         window_->draw(*hline);
     }
     auto vline = getShape("vline");
     for (int i=0; i<world_->getHeight();i += 50) {
-        vline->setPosition(sf::Vector2f(0,i));
+        vline->setPosition((sf::Vector2f(0,i) - padding) * zoom + offset);
+        vline->setScale(zoom, zoom);
         window_->draw(*vline);
     }
 
     for (auto const& e: world_->entities) {
         auto shape = e->getShape();
         shape->setRotation(e->getAngle());
-        shape->setPosition(e->getPosition());
+        shape->setPosition((e->getPosition() - padding) * zoom + offset);
+        shape->setScale(world_.get()->getCameraZoom(), world_.get()->getCameraZoom());
         window_->draw(*shape);
         auto hpRatio = e->getHPRatio();
         if (hpRatio>0 && hpRatio<1) {
@@ -146,14 +153,16 @@ void View::update(std::string overlayText, int x, int y) {
             auto progress = sf::RectangleShape();
             auto size = e->getRadius()*1.2;
 
-            bar.setPosition(e->getPosition() + sf::Vector2f(-size/2, size));
+            bar.setPosition((e->getPosition() + sf::Vector2f(-size/2, size) - padding) * zoom + offset);
             bar.setSize(sf::Vector2f(size, 4.));
+            bar.setScale(world_.get()->getCameraZoom(), world_.get()->getCameraZoom());
             bar.setOutlineColor(sf::Color::Transparent);
             bar.setFillColor(sf::Color(127, 127, 127));
             window_->draw(bar);
 
-            progress.setPosition(e->getPosition() + sf::Vector2f(-size/2, size));
+            progress.setPosition((e->getPosition() + sf::Vector2f(-size/2, size) - padding) * zoom + offset);
             progress.setSize(sf::Vector2f(hpRatio*size, 4.));
+            progress.setScale(world_.get()->getCameraZoom(), world_.get()->getCameraZoom());
             progress.setOutlineColor(sf::Color::Transparent);
             progress.setFillColor(sf::Color::Green);
             window_->draw(progress);
@@ -162,8 +171,9 @@ void View::update(std::string overlayText, int x, int y) {
     }
     for (auto const& s: world_->tanks) {
         auto shape = s->getEmptyShape();
-        shape->setPosition(s->getPosition());
+        shape->setPosition(s->getPosition() - padding) * zoom + offset);
         // No rotation: that's a circle
+        shape->setScale(world_.get()->getCameraZoom(), world_.get()->getCameraZoom());
         window_->draw(*shape);
     }
 
@@ -180,17 +190,17 @@ void View::update(std::string overlayText, int x, int y) {
     if (!world_.get()->tanks.empty()) {
         auto bar = sf::RectangleShape();
         auto progress = sf::RectangleShape();
-        auto size = world_.get()->getWidth() / 2;
+        auto size = world_.get()->getWindowWidth() / 2;
         auto ratio = world_.get()->tanks.at(0).get()->getXp() / world_.get()->tanks.at(0).get()->getGoalScore(); // on récupère le tank 0, s'il y en a plusieurs il faut regarder si c'est le bon...
         ratio = ratio > 1 ? 1 : ratio;
 
-        bar.setPosition(sf::Vector2f((world_.get()->getWidth() - size) / 2, world_.get()->getHeight() - 20));
+        bar.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
         bar.setSize(sf::Vector2f(size, 10.));
         bar.setOutlineColor(sf::Color::Transparent);
         bar.setFillColor(sf::Color(127, 127, 127));
         window_->draw(bar);
         
-        progress.setPosition(sf::Vector2f((world_.get()->getWidth() - size) / 2, world_.get()->getHeight() - 20));
+        progress.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
         progress.setSize(sf::Vector2f(size * ratio, 10.));
         progress.setOutlineColor(sf::Color::Transparent);
         progress.setFillColor(sf::Color::Green);
@@ -201,3 +211,6 @@ void View::update(std::string overlayText, int x, int y) {
     window_->display();
 }
 
+World* View::getWorld() {
+    return world_.get();
+}

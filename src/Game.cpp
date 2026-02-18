@@ -12,7 +12,7 @@ Game::Game() : window_(std::make_shared<sf::RenderWindow>(sf::VideoMode(width, h
 }
 
 int Game::run() {
-    auto world = std::make_shared<World>(width, heigth);
+    auto world = std::make_shared<World>(2000, 2000, width, heigth);
     View view(world, window_);
     sf::Clock clock;
 
