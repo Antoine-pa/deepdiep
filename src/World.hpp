@@ -7,9 +7,11 @@
 #include "Asteroid.hpp"
 
 class View;
+class Layout;
 
 class World {
     friend View;
+    friend Layout;
 
     bool running_ = true;
     unsigned long tick_ = 0;
