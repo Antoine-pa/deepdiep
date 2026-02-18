@@ -18,8 +18,6 @@ class World {
 
     int windowWidth_;
     int windowHeight_;
-    sf::Vector2f cameraPos_;
-    float cameraZoom_;
 
 public:
     World(int width, int height, int windowWidth, int windowHeight);
@@ -34,9 +32,8 @@ public:
     std::string getStringOutcome();
     void push(EntityPtr e);
 
-    sf::Vector2f getCameraPos(sf::Vector2f tankPos) const;
-    float getCameraZoom() const;
-    void setCameraZoom(float zoom);
+    sf::Vector2f getCameraPos(sf::Vector2f tankPos, float zoom) const;
+    
     int getWindowWidth() const;
     int getWindowHeight() const;
 

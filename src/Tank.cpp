@@ -45,8 +45,8 @@ void Tank::update(const GameCmd* command) {
         move_.x = abs(move_.x) - inertia_ > 0 ? (abs(move_.x) - inertia_) * (move_.x / abs(move_.x)) : 0;
     }
 
-    if (command->pressA()) world_->setCameraZoom(world_->getCameraZoom() - 0.03);
-    if (command->pressE()) world_->setCameraZoom(world_->getCameraZoom() + 0.03);
+    if (command->pressA()) zoom_ - 0.03;
+    if (command->pressE()) zoom_ + 0.03;
 
     // Decrease impulsion after shoot with the time
     if (abs(impulsion_.x) > 0)
@@ -60,7 +60,7 @@ void Tank::update(const GameCmd* command) {
         fire();
     
     // Mouse relative position after zoom and camera move
-    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos(position_);
+    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos(position_, zoom_);
     relMousePos.x -= world_->getWindowWidth() / 2;
     relMousePos.y -= world_->getWindowHeight() / 2;
 
@@ -118,12 +118,20 @@ void Tank::setDamage(int newDamage) {
     damage_ = newDamage;
 }
 
+float Tank::getZoom() {
+    return zoom_;
+}
+
 sf::Shape* Tank::getEmptyShape() {
     return empty_shape_;
 }
 void Tank::setEmptyShape(sf::Shape* shape) {
     empty_shape_ = shape;
 }
+
+
+
+
 
 Destroyer::Destroyer(World* world, sf::Vector2f pos) :
     Tank(world, pos) {

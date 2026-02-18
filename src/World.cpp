@@ -12,11 +12,7 @@ World::World(int width, int height, int windowWidth, int windowHeight):
     auto randX     = std::bind(std::uniform_int_distribution<>(0, width_-1),  std::mt19937(rd()));
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
 
-
     auto tank = std::make_shared<Destroyer>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
-    cameraPos_ = tank.get()->getPosition();
-    cameraZoom_ = 1;
-    
     
     tanks.push_back(tank);
     entities.push_back(tank);
@@ -88,10 +84,10 @@ void World::push(EntityPtr e) {
     entities.push_back(e);
 }
 
-sf::Vector2f World::getCameraPos(sf::Vector2f tankPos) const {
+sf::Vector2f World::getCameraPos(sf::Vector2f tankPos, float zoom) const {
     // Il faut encore vérifier que la caméra s'arête au bord de l'écran si on dépasse (en prenant en compte le zoom)
-    float halfViewW = (windowWidth_ / 2) / cameraZoom_;
-    float halfViewH = (windowHeight_ / 2) / cameraZoom_;
+    float halfViewW = (windowWidth_ / 2) / zoom;
+    float halfViewH = (windowHeight_ / 2) / zoom;
     if (tankPos.x + halfViewW > width_) {
         tankPos.x = width_ - halfViewW;
     }
@@ -106,12 +102,7 @@ sf::Vector2f World::getCameraPos(sf::Vector2f tankPos) const {
     }
     return tankPos;
 }
-float World::getCameraZoom() const {
-    return cameraZoom_;
-}
-void World::setCameraZoom(float zoom) {
-    cameraZoom_ = zoom;
-}
+
 int World::getWindowWidth() const {
     return windowWidth_;
 }
