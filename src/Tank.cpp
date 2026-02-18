@@ -128,7 +128,7 @@ sf::Shape* Tank::getEmptyShape() {
 void Tank::setEmptyShape(sf::Shape* shape) {
     empty_shape_ = shape;
 }
-sf::View Tank::getView() {
+sf::View Tank::getViewport() {
     return viewport_;
 }
 void Tank::setViewport(sf::View viewport) {
