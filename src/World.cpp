@@ -13,7 +13,7 @@ World::World(int width, int height, int windowWidth, int windowHeight):
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
 
 
-    auto tank = std::make_shared<Tank>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
+    auto tank = std::make_shared<Destroyer>(this, sf::Vector2f(randX(), randY()));   // Rajouter la position d'apparition ?
     cameraPos_ = tank.get()->getPosition();
     cameraZoom_ = 1;
     
