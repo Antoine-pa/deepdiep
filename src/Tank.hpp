@@ -46,7 +46,7 @@ class Tank: public Entity {
 
 class Destroyer: public Tank {
     public:
-        explicit Destroyer(World* world);
+        explicit Destroyer(World* world, sf::Vector2f pos);
         ~Destroyer();
 };
 

@@ -123,8 +123,8 @@ void Tank::setEmptyShape(sf::Shape* shape) {
     empty_shape_ = shape;
 }
 
-Destroyer::Destroyer(World* world) :
-    Tank(world) {
+Destroyer::Destroyer(World* world, sf::Vector2f pos) :
+    Tank(world, pos) {
         damage_ *= 2;
         reload_time_ *= 2;
         setShape(View::getShape("destroyer"));

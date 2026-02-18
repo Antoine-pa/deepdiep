@@ -171,7 +171,7 @@ void View::update(std::string overlayText, int x, int y) {
     }
     for (auto const& s: world_->tanks) {
         auto shape = s->getEmptyShape();
-        shape->setPosition(s->getPosition() - padding) * zoom + offset);
+        shape->setPosition((s->getPosition() - padding) * zoom + offset);
         // No rotation: that's a circle
         shape->setScale(world_.get()->getCameraZoom(), world_.get()->getCameraZoom());
         window_->draw(*shape);
