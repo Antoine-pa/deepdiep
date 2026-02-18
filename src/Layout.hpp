@@ -5,12 +5,11 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class Layout: public View {
-
-private:
-    std::vector<sf::View> views_;
-    std::vector<std::shared_ptr<Tank>> players_;
-public:
-    Layout(std::shared_ptr<World> world, std::shared_ptr<sf::RenderWindow> window);
+    private:
+        std::vector<sf::View> views_{7};
+        std::vector<std::shared_ptr<Tank>> players_;
+    public:
+        Layout(std::shared_ptr<World> world, std::shared_ptr<sf::RenderWindow> window);
 
     void update(std::string overlayText = "", int x=0, int y=0);
 

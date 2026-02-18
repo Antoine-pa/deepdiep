@@ -120,9 +120,10 @@ sf::Shape* View::getShape(std::string name) {
     return shapes_.at(name).get();
 }
 
-void View::update(Tank* tank, sf::View view, std::string overlayText, int x, int y) {
+void View::update(Tank* tank, std::string overlayText, int x, int y) {
     window_->clear(sf::Color(225, 225, 225));
 
+    sf::View view = tank->getViewport();
     view.setCenter(world_.get()->getCameraPos(tank));
     view.setSize(sf::Vector2f(world_.get()->windowWidth_ * view.getViewport().width, world_.get()->windowHeight_ * view.getViewport().height));
     window_->setView(view);
@@ -181,25 +182,23 @@ void View::update(Tank* tank, sf::View view, std::string overlayText, int x, int
     }
 
     // Drawing score bar
-    if (!world_.get()->tanks.empty()) {
-        auto bar = sf::RectangleShape();
-        auto progress = sf::RectangleShape();
-        auto size = world_.get()->getWindowWidth() / 2;
-        auto ratio = world_.get()->tanks.at(0).get()->getXp() / world_.get()->tanks.at(0).get()->getGoalScore(); // on récupère le tank 0, s'il y en a plusieurs il faut regarder si c'est le bon...
-        ratio = ratio > 1 ? 1 : ratio;
+    auto bar = sf::RectangleShape();
+    auto progress = sf::RectangleShape();
+    auto size = world_.get()->getWindowWidth() / 2;
+    auto ratio = tank->getXp() / tank->getGoalScore();
+    ratio = ratio > 1 ? 1 : ratio;
 
-        bar.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
-        bar.setSize(sf::Vector2f(size, 10.));
-        bar.setOutlineColor(sf::Color::Transparent);
-        bar.setFillColor(sf::Color(127, 127, 127));
-        window_->draw(bar);
-        
-        progress.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
-        progress.setSize(sf::Vector2f(size * ratio, 10.));
-        progress.setOutlineColor(sf::Color::Transparent);
-        progress.setFillColor(sf::Color::Green);
-        window_->draw(progress);
-    }
+    bar.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
+    bar.setSize(sf::Vector2f(size, 10.));
+    bar.setOutlineColor(sf::Color::Transparent);
+    bar.setFillColor(sf::Color(127, 127, 127));
+    window_->draw(bar);
+    
+    progress.setPosition(sf::Vector2f((world_.get()->getWindowWidth() - size) / 2, world_.get()->getWindowHeight() - 20));
+    progress.setSize(sf::Vector2f(size * ratio, 10.));
+    progress.setOutlineColor(sf::Color::Transparent);
+    progress.setFillColor(sf::Color::Green);
+    window_->draw(progress);
 
     // End of update
     window_->display();

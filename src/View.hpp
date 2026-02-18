@@ -23,7 +23,7 @@ public:
     static sf::Shape* getShape(std::string name);
     static void registerShape(std::string name, sf::Shape* shape);
 
-    void update(Tank* tank, sf::View view, std::string overlayText = "", int x=0, int y=0);
+    void update(Tank* tank, std::string overlayText = "", int x=0, int y=0);
     World* getWorld();
 };
 #endif

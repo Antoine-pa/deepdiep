@@ -7,14 +7,19 @@
 
 Layout::Layout(std::shared_ptr<World> world, std::shared_ptr<sf::RenderWindow> window):
     View::View(world, window) {
-        sf::View view0;
-        view0.setViewport(sf::FloatRect(0., 0., 0.5, 1.));
-        views_.push_back(view0);
+        views_[0].setViewport(sf::FloatRect(0., 0., 1., 1.));
+        views_[0].setViewport(sf::FloatRect(0., 0., 0.5, 1.));
+        views_[2].setViewport(sf::FloatRect(0.5, 0., 0.5, 1.));
+        views_[3].setViewport(sf::FloatRect(0., 0., 0.5, 0.5));
+        views_[4].setViewport(sf::FloatRect(0., 0.5, 0.5, 0.5));
+        views_[5].setViewport(sf::FloatRect(0.5, 0., 0.5, 0.5));
+        views_[6].setViewport(sf::FloatRect(0.5, 0.5, 0.5, 0.5));
         addPlayerToLayout(world.get()->tanks[0]);
     }
 
 void Layout::update(std::string overlayText, int x, int y) {
-    View::update(players_[0].get(), views_[0], overlayText, x, y);
+    for (auto &player : players_)
+        View::update(player.get(), overlayText, x, y);
 }
 
 void Layout::addPlayerToLayout(std::shared_ptr<Tank> player) {
