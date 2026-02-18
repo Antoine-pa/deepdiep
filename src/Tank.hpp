@@ -36,7 +36,7 @@ class Tank: public Entity {
         sf::Shape* getEmptyShape();
         void setEmptyShape(sf::Shape*);
 
-        sf::View getView();
+        sf::View getViewport();
         void setViewport(sf::View viewport);
     protected:
         int reload_time_ = 5;
