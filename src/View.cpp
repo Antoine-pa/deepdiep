@@ -197,8 +197,6 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
     progress.setFillColor(sf::Color::Green);
     window_->draw(progress);
 
-    // End of update
-    window_->display();
 }
 
 World* View::getWorld() {

@@ -22,7 +22,7 @@ void Layout::update(std::string overlayText, int x, int y) {
     window_.get()->clear(sf::Color(225, 225, 225));
     for (auto &player : players_)
         View::update(player.get(), overlayText, x, y);
-    // View::update(players_[1].get(), overlayText, x, y);
+    window_.get()->display();
 }
 
 void Layout::addPlayerToLayout(std::shared_ptr<Tank> player) {
