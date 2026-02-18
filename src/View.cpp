@@ -123,7 +123,7 @@ sf::Shape* View::getShape(std::string name) {
 void View::update(Tank* tank, sf::View view, std::string overlayText, int x, int y) {
     window_->clear(sf::Color(225, 225, 225));
 
-    view.setCenter(world_.get()->getCameraPos(tank->getPosition(), tank->getZoom()));
+    view.setCenter(world_.get()->getCameraPos(tank));
     view.setSize(sf::Vector2f(world_.get()->windowWidth_ * view.getViewport().width, world_.get()->windowHeight_ * view.getViewport().height));
     window_->setView(view);
 

@@ -60,7 +60,7 @@ void Tank::update(const GameCmd* command) {
         fire();
     
     // Mouse relative position after zoom and camera move
-    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos(position_, zoom_);
+    auto relMousePos = sf::Vector2f(command->getMousePos()) - position_ + world_->getCameraPos(this);
     relMousePos.x -= world_->getWindowWidth() / 2;
     relMousePos.y -= world_->getWindowHeight() / 2;
 
@@ -127,6 +127,9 @@ sf::Shape* Tank::getEmptyShape() {
 }
 void Tank::setEmptyShape(sf::Shape* shape) {
     empty_shape_ = shape;
+}
+sf::View Tank::getView() {
+    return viewport_;
 }
 void Tank::setViewport(sf::View viewport) {
     viewport_ = viewport;

@@ -32,9 +32,11 @@ class Tank: public Entity {
         int getDamage();
         void setDamage(int newDamage);
         float getZoom();
-
+        
         sf::Shape* getEmptyShape();
         void setEmptyShape(sf::Shape*);
+
+        sf::View getView();
         void setViewport(sf::View viewport);
     protected:
         int reload_time_ = 5;
@@ -46,7 +48,7 @@ class Tank: public Entity {
         sf::Vector2f impulsion_ = sf::Vector2f(0.f, 0.f);      // impulsion is the inertia of the shots
 
         int goalScore = 100;
-        float zoom_;
+        float zoom_ = 1.;
 };
 
 class Destroyer: public Tank {

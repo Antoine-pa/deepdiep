@@ -34,7 +34,7 @@ public:
     std::string getStringOutcome();
     void push(EntityPtr e);
 
-    sf::Vector2f getCameraPos(sf::Vector2f tankPos, float zoom) const;
+    sf::Vector2f getCameraPos(Tank* tank) const;
     
     int getWindowWidth() const;
     int getWindowHeight() const;
