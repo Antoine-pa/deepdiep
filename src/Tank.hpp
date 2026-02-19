@@ -44,7 +44,9 @@ class Tank: public Entity {
 
     protected:
         int reload_time_ = 5;
-        int damage_ = 1;
+        int damage_ = 6;
+        float bullet_size_ = 2.f;
+        float bullet_speed_ = 10.f;
         sf::Shape* empty_shape_;
 
     private:
@@ -57,6 +59,10 @@ class Tank: public Entity {
         KeySet* ks_;
 };
 
+class MachineGun: public Tank {
+    public:
+        explicit MachineGun(World* world, sf::Vector2f pos, int team);
+};
 class Destroyer: public Tank {
     public:
         explicit Destroyer(World* world, sf::Vector2f pos, int team);

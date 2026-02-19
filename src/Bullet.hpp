@@ -17,7 +17,7 @@ class Bullet: public Entity {
     Tank* parent_;
 
 public:
-    explicit Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl);
+    explicit Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl, float radius);
 
     void update(const GameCmd* command) override;
     Tank* getParent();

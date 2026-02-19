@@ -12,9 +12,14 @@ Tank::Tank(World* world, sf::Vector2f pos, int team) :
     position_.x = pos.x;
     position_.y = pos.y;
     setSpeed(5.f);
-    maxHP_ = 8;
-    hp_ = 8;
-    empty_shape_ = View::getShape("empty tank");
+    maxHP_ = 50;
+    hp_ = 50;
+    reload_time_ = 15;
+    damage_ = 7;
+    bodyDamage_ = 20;
+    bullet_size_ = 2.f;
+    bullet_speed_ = 10.f;
+    empty_shape_ = View::getShape("body tank");
 
     ks_ = new KeySet();
 }
@@ -90,12 +95,14 @@ void Tank::update(const GameCmd* command) {
 void Tank::fire() {
     if ((int)(world_->getTick()) - last_fire_ >= reload_time_) {
         world_->push(std::shared_ptr<Entity>(
-            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), 27.f, 25)));
+            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), bullet_speed_, 50, bullet_size_)));
         last_fire_ = world_->getTick();
         
         // Add recoil of weapons 
-        impulsion_.x -= inertia_ * cos(getAngle() * 3.14159f / 180.0f);
-        impulsion_.y -= inertia_ * sin(getAngle() * 3.14159f / 180.0f);
+        impulsion_.x -= cos(getAngle() * 3.14159f / 180.0f) / inertia_;
+        impulsion_.y -= sin(getAngle() * 3.14159f / 180.0f) / inertia_;
+        // impulsion_.x -= inertia_ * cos(getAngle() * 3.14159f / 180.0f);
+        // impulsion_.y -= inertia_ * sin(getAngle() * 3.14159f / 180.0f);
         if (abs(impulsion_.x) > speed_ / 2)
             impulsion_.x = speed_  /2 * (impulsion_.x / abs(impulsion_.x));
         if (abs(impulsion_.y) > speed_ / 2)
@@ -150,12 +157,25 @@ KeySet* Tank::getKeyset() const {
 
 
 
+MachineGun::MachineGun(World* world, sf::Vector2f pos, int team) :
+    Tank(world, pos, team) {
+        damage_ = 4.9f;
+        reload_time_ = 5.f;
+        bullet_size_ /= 1.5f;
+        setInertia(1.1f);
+        setShape(View::getShape("machine gun"));
+        setEmptyShape(View::getShape("body machine gun"));
+    }
+
 Destroyer::Destroyer(World* world, sf::Vector2f pos, int team) :
     Tank(world, pos, team) {
-        damage_ *= 2;
-        reload_time_ *= 2;
+        damage_ = 21;
+        reload_time_ = 60;
+        bullet_size_ *= 2;
+        bullet_speed_ /= 1.5f;
+        setInertia(0.3f);
         setShape(View::getShape("destroyer"));
-        setEmptyShape(View::getShape("empty destroyer"));
+        setEmptyShape(View::getShape("body destroyer"));
     }
 
 Destroyer::~Destroyer() = default;

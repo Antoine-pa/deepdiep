@@ -73,29 +73,39 @@ void View::initAssets() {
     tank->setOutlineThickness(1);
     registerShape("tank", tank);
 
-    // Empty tank
-    auto emptyTank = new sf::CircleShape(12.f, 20);
-    emptyTank->setFillColor(sf::Color(128, 191, 255));
-    emptyTank->setOutlineColor(sf::Color(51, 153, 255));
-    emptyTank->setOutlineThickness(5);
-    emptyTank->setOrigin(12,12);
-    registerShape("empty tank", emptyTank);
+    // Body tank
+    auto bodyTank = new sf::CircleShape(12.f, 20);
+    bodyTank->setOutlineThickness(5);
+    bodyTank->setOrigin(12,12);
+    registerShape("body tank", bodyTank);
+
+    // MachineGun
+    auto machinegun = new sf::RectangleShape(sf::Vector2f(23, 22));
+    machinegun->setFillColor(sf::Color(115, 115, 115));
+    machinegun->setOutlineColor(sf::Color(38, 38, 38));
+    machinegun->setOrigin(-11,11);
+    machinegun->setOutlineThickness(1);
+    registerShape("machine gun", machinegun);
+
+    // Body MachineGun
+    auto bodyMachinegun = new sf::CircleShape(14.f, 20);
+    bodyMachinegun->setOutlineThickness(5);
+    bodyMachinegun->setOrigin(14,14);
+    registerShape("body machine gun", bodyMachinegun);
 
     // Destroyer
-    auto destroyer = new sf::RectangleShape(sf::Vector2f(28 ,16));
+    auto destroyer = new sf::RectangleShape(sf::Vector2f(23, 22));
     destroyer->setFillColor(sf::Color(115, 115, 115));
     destroyer->setOutlineColor(sf::Color(38, 38, 38));
-    destroyer->setOrigin(-14,8);
+    destroyer->setOrigin(-11,11);
     destroyer->setOutlineThickness(1);
     registerShape("destroyer", destroyer);
 
-    // Empty Destroyer
-    auto emptyDestroyer = new sf::CircleShape(18.f, 20);
-    emptyDestroyer->setFillColor(sf::Color(255, 191, 128));
-    emptyDestroyer->setOutlineColor(sf::Color(255, 153, 51));
-    emptyDestroyer->setOutlineThickness(5);
-    emptyDestroyer->setOrigin(18,18);
-    registerShape("empty destroyer", emptyDestroyer);
+    // Body Destroyer
+    auto bodyDestroyer = new sf::CircleShape(18.f, 20);
+    bodyDestroyer->setOutlineThickness(5);
+    bodyDestroyer->setOrigin(18,18);
+    registerShape("body destroyer", bodyDestroyer);
 
     // horizontal grid element
     auto hline = new sf::RectangleShape(sf::Vector2f(0, 2000));
@@ -142,6 +152,15 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
         auto shape = e->getShape();
         shape->setRotation(e->getAngle());
         shape->setPosition(e->getPosition());
+        if (shape == getShape("bullet")) shape->setScale(e->getRadius(), e->getRadius());
+        if (e->getTeam() > 0 && shape == getShape("bullet") && e->getTeam() != tank->getTeam()) {
+            shape->setFillColor(sf::Color::Red);
+            shape->setOutlineColor(sf::Color(sf::Color::Red.r, sf::Color::Red.g, sf::Color::Red.b, 150));
+        }
+        else if (e->getTeam() > 0 && shape == getShape("bullet") && e->getTeam() == tank->getTeam()) {
+            shape->setFillColor(sf::Color::Blue);
+            shape->setOutlineColor(sf::Color(sf::Color::Blue.r, sf::Color::Blue.g, sf::Color::Blue.b, 150));
+        }
         window_->draw(*shape);
         auto hpRatio = e->getHPRatio();
         if (hpRatio>0 && hpRatio<1) {

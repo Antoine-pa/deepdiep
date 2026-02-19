@@ -57,6 +57,7 @@ public:
     void  setSpeed(float s);
     float getXp() const;
     void  addXp(float s);
+    void setInertia(float i);
     float getRotSpeed() const;
     void  setRotSpeed(float rs);
     float getRadius() const;

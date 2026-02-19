@@ -8,8 +8,8 @@
 
 
 
-Bullet::Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl) :
-    Entity(world, parent->getTeam(), 2.f, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0), parent_(parent) {
+Bullet::Bullet(World* world, Tank* parent, float x, float y, float angle, float speed, int ttl, float radius) :
+    Entity(world, parent->getTeam(), radius, View::getShape("bullet"), sf::Vector2f(x,y), angle, 0), parent_(parent) {
     ttl_ = ttl;
     speed_ = speed;
     maxHP_ = 1;
