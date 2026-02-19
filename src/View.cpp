@@ -125,7 +125,7 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
     view.setCenter(world_->getCameraPos(tank));
     view.setSize(sf::Vector2f(world_->windowWidth_ * view.getViewport().width / tank->getZoom(), world_->windowHeight_ * view.getViewport().height / tank->getZoom()));
     window_->setView(view);
-
+ 
     // Draw a grid
     auto hline = getShape("hline");
     for (int i=0; i<=world_->getWidth();i += 50) {
@@ -166,6 +166,14 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
     for (auto const& s: world_->tanks) {
         auto shape = s->getEmptyShape();
         shape->setPosition(s->getPosition());
+        if (s->getTeam() != tank->getTeam()) {
+            shape->setFillColor(sf::Color(255, 41, 28));
+            shape->setOutlineColor(sf::Color(255, 81, 71));
+        }
+        else {
+            shape->setFillColor(sf::Color(128, 191, 255));
+            shape->setOutlineColor(sf::Color(51, 153, 255));
+        }
         // No rotation: that's a circle
         window_->draw(*shape);
     }
@@ -182,21 +190,28 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
     // Drawing score bar
     auto bar = sf::RectangleShape();
     auto progress = sf::RectangleShape();
-    auto size = world_->getWindowWidth() / 2;
+    auto size = world_->getWindowWidth() * tank->getViewport().getViewport().width / 2;
     auto ratio = tank->getXp() / tank->getGoalScore();
     ratio = ratio > 1 ? 1 : ratio;
 
-    bar.setPosition(sf::Vector2f((world_->getWindowWidth() - size) / 2, world_->getWindowHeight() - 20));
-    bar.setSize(sf::Vector2f(size, 10.));
+    bar.setPosition(view.getCenter() + sf::Vector2f(- size / 2, world_->getWindowHeight() * tank->getViewport().getViewport().height / 2 - 20) / tank->getZoom());
+    bar.setSize(sf::Vector2f(size, 10.) / tank->getZoom());
     bar.setOutlineColor(sf::Color::Transparent);
     bar.setFillColor(sf::Color(127, 127, 127));
     window_->draw(bar);
     
-    progress.setPosition(sf::Vector2f((world_->getWindowWidth() - size) / 2, world_->getWindowHeight() - 20));
-    progress.setSize(sf::Vector2f(size * ratio, 10.));
+    progress.setPosition(view.getCenter() + sf::Vector2f(- size / 2, world_->getWindowHeight() * tank->getViewport().getViewport().height / 2 - 20) / tank->getZoom());
+    progress.setSize(sf::Vector2f(size * ratio, 10.) / tank->getZoom());
     progress.setOutlineColor(sf::Color::Transparent);
     progress.setFillColor(sf::Color::Green);
     window_->draw(progress);
+
+    if (tank->getKeyset()->aim_type == KeySet::Aim::AKeys) {
+        auto target = sf::CircleShape(3.f, 20);
+        target.setFillColor(sf::Color::Red);
+        target.setPosition(tank->getPosition() + (sf::Vector2f)(tank->getKeyset()->keyMousePos_));
+        window_->draw(target);
+    }
 
 }
 

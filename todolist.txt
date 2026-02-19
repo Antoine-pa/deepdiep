@@ -1,6 +1,6 @@
 split les commandes pour jouer à plusieurs -> changer la gestion des commandes
 faire des changements qualitatifs sur les tanks (rajouter des tanks)
-ajouter les objets incassables avec rebondissement des balles
+ajouter les objets incassables avec rebondissement des balles (plus compliqué que prévu...)
 ajouter la logique du jeu (game design, faire les niveaux d'xp)
 replacer l'xp des joueurs au bon endroits dans les views
 faire le découpage de la grille pour ne pas tester toute les collisions

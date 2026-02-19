@@ -15,6 +15,8 @@ Tank::Tank(World* world, sf::Vector2f pos, int team) :
     maxHP_ = 8;
     hp_ = 8;
     empty_shape_ = View::getShape("empty tank");
+
+    ks_ = new KeySet();
 }
 Tank::~Tank() = default;
 
@@ -26,27 +28,29 @@ void Tank::update(const GameCmd* command) {
     if (command == nullptr) // Call two times each tick, one with this argument
         return;
     
-    int presset_key_ = team_-1;
-    if (command->pressUp(presset_key_) || command->pressDown(presset_key_)) {
-        if (command->pressDown(presset_key_))
-            move_.y = move_.y < speed_ ? move_.y + inertia_ : speed_;
-        if (command->pressUp(presset_key_))
-            move_.y = move_.y > -speed_ ? move_.y - inertia_ : -speed_;
+    sf::Vector2f move = command->getMove(ks_);
+    move_ += move * inertia_;
+    if (move_.x*move_.x + move_.y*move_.y > speed_*speed_) {
+        float spd = sqrtf(move_.x*move_.x + move_.y*move_.y);
+        move_.x *= speed_ / spd;
+        move_.y *= speed_ / spd;
     }
-    else {
-        move_.y = abs(move_.y) - inertia_ > 0 ? (abs(move_.y) - inertia_) * (move_.y / abs(move_.y)) : 0;
-    }
-    if (command->pressLeft(presset_key_) || command->pressRight(presset_key_)) {
-        if (command->pressRight(presset_key_))
-            move_.x = move_.x < speed_ ? move_.x + inertia_ : speed_;
-        if (command->pressLeft(presset_key_))
-            move_.x = move_.x > -speed_ ? move_.x - inertia_ : -speed_;
-    }
-    else {
-        move_.x = abs(move_.x) - inertia_ > 0 ? (abs(move_.x) - inertia_) * (move_.x / abs(move_.x)) : 0;
+    if (ks_->aim_type == KeySet::Aim::AKeys) {
+        ks_->keyMousePos_ += (sf::Vector2i)(command->getMove(ks_, true) * inertia_ * 4.f);
+        if (ks_->keyMousePos_.x*ks_->keyMousePos_.x + ks_->keyMousePos_.y*ks_->keyMousePos_.y > radius_ * radius_ * 4) {
+            float spd = sqrtf(ks_->keyMousePos_.x*ks_->keyMousePos_.x + ks_->keyMousePos_.y*ks_->keyMousePos_.y);
+            ks_->keyMousePos_.x *= radius_ * 4 / spd;
+            ks_->keyMousePos_.y *= radius_ * 4 / spd;
+        }
     }
 
-    // Decrease impulsion after shoot with the time
+    // if we don't move we slow down
+    if (move.x == 0)
+        move_.x = abs(move_.x) - inertia_ > 0 ? (abs(move_.x) - inertia_) * (move_.x / abs(move_.x)) : 0;
+    if (move.y == 0)
+        move_.y = abs(move_.y) - inertia_ > 0 ? (abs(move_.y) - inertia_) * (move_.y / abs(move_.y)) : 0;
+
+    // Decrease recoil impulsion after shoot with the time
     if (abs(impulsion_.x) > 0)
         impulsion_.x = abs(impulsion_.x) - inertia_ / 6 > 0 ? (abs(impulsion_.x) - inertia_ / 6) * (impulsion_.x / abs(impulsion_.x)) : 0;
     if (abs(impulsion_.y) > 0)
@@ -54,21 +58,20 @@ void Tank::update(const GameCmd* command) {
 
     position_.x += move_.x + impulsion_.x;
     position_.y += move_.y + impulsion_.y;
-    if (command->pressFire(presset_key_))
+    if (command->pressFire(ks_))
         fire();
     
-    // Mouse relative position after zoom and camera move
-    auto relMousePos = getRelativeMousePos(command->getMousePos());
-
+    
     auto angle = 0;
-    if (relMousePos.x == 0) {
-        if (relMousePos.y>0)
-            angle= 90;
-        else
-            angle = -90;
-    } else {
+    
+    if (ks_->aim_type == KeySet::Aim::AMouse) {
+        auto relMousePos = getRelativeMousePos(command->getMousePos(ks_));
         angle = atan2(relMousePos.y,relMousePos.x)*180./3.14159;
-        // See https://www.dsprelated.com/showarticle/1052.php if atan2 becomes an issue (what I doubt)
+    }
+    else {
+        // Mouse relative position after zoom and camera move
+        auto relMousePos = command->getMousePos(ks_);
+        angle = atan2(relMousePos.y,relMousePos.x)*180./3.14159;
     }
     setAngle(angle);
 
@@ -140,7 +143,9 @@ sf::Vector2f Tank::getRelativeMousePos(sf::Vector2i mousePos) {
     result += world_->getCameraPos(this) - position_;
     return result;
 }
-
+KeySet* Tank::getKeyset() const {
+    return ks_;
+}
 
 
 

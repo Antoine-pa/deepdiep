@@ -40,11 +40,13 @@ class Tank: public Entity {
         void setViewport(sf::View viewport);
         void setViewportSize(sf::Vector2f worldSize);
         sf::Vector2f getRelativeMousePos(sf::Vector2i mousePos);
+        KeySet* getKeyset() const;
 
     protected:
         int reload_time_ = 5;
         int damage_ = 1;
         sf::Shape* empty_shape_;
+
     private:
         sf::View viewport_;
         int last_fire_ = 0;
@@ -52,6 +54,7 @@ class Tank: public Entity {
 
         int goalScore = 100;
         float zoom_ = 1.;
+        KeySet* ks_;
 };
 
 class Destroyer: public Tank {
