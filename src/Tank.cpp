@@ -26,27 +26,25 @@ void Tank::update(const GameCmd* command) {
     if (command == nullptr) // Call two times each tick, one with this argument
         return;
     
-    if (command->pressUp() || command->pressDown()) {
-        if (command->pressDown())
+    int presset_key_ = team_-1;
+    if (command->pressUp(presset_key_) || command->pressDown(presset_key_)) {
+        if (command->pressDown(presset_key_))
             move_.y = move_.y < speed_ ? move_.y + inertia_ : speed_;
-        if (command->pressUp())
+        if (command->pressUp(presset_key_))
             move_.y = move_.y > -speed_ ? move_.y - inertia_ : -speed_;
     }
     else {
         move_.y = abs(move_.y) - inertia_ > 0 ? (abs(move_.y) - inertia_) * (move_.y / abs(move_.y)) : 0;
     }
-    if (command->pressLeft() || command->pressRight()) {
-        if (command->pressRight())
+    if (command->pressLeft(presset_key_) || command->pressRight(presset_key_)) {
+        if (command->pressRight(presset_key_))
             move_.x = move_.x < speed_ ? move_.x + inertia_ : speed_;
-        if (command->pressLeft())
+        if (command->pressLeft(presset_key_))
             move_.x = move_.x > -speed_ ? move_.x - inertia_ : -speed_;
     }
     else {
         move_.x = abs(move_.x) - inertia_ > 0 ? (abs(move_.x) - inertia_) * (move_.x / abs(move_.x)) : 0;
     }
-
-    if (command->pressA()) zoom_ -= 0.03;
-    if (command->pressE()) zoom_ += 0.03;
 
     // Decrease impulsion after shoot with the time
     if (abs(impulsion_.x) > 0)
@@ -56,7 +54,7 @@ void Tank::update(const GameCmd* command) {
 
     position_.x += move_.x + impulsion_.x;
     position_.y += move_.y + impulsion_.y;
-    if (command->pressFire())
+    if (command->pressFire(presset_key_))
         fire();
     
     // Mouse relative position after zoom and camera move

@@ -123,16 +123,17 @@ sf::Shape* View::getShape(std::string name) {
 void View::update(Tank* tank, std::string overlayText, int x, int y) {
     sf::View view = tank->getViewport();
     view.setCenter(world_->getCameraPos(tank));
+    view.setSize(sf::Vector2f(world_->windowWidth_ * view.getViewport().width / tank->getZoom(), world_->windowHeight_ * view.getViewport().height / tank->getZoom()));
     window_->setView(view);
 
     // Draw a grid
     auto hline = getShape("hline");
-    for (int i=0; i<world_->getWidth();i += 50) {
+    for (int i=0; i<=world_->getWidth();i += 50) {
         hline->setPosition(sf::Vector2f(i,0));
         window_->draw(*hline);
     }
     auto vline = getShape("vline");
-    for (int i=0; i<world_->getHeight();i += 50) {
+    for (int i=0; i<=world_->getHeight();i += 50) {
         vline->setPosition(sf::Vector2f(0,i));
         window_->draw(*vline);
     }

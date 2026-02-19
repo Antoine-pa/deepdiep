@@ -5,37 +5,24 @@
 #include <SFML/Window/Window.hpp>
 
 GameCmd::GameCmd(const sf::Window& relativeTo) {
-    a = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-    e = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
-    up = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
-    down = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
-    left = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
-    right = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
-    fire = sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Mouse::isButtonPressed(sf::Mouse::Left);
     mousePos_ = sf::Mouse::getPosition(relativeTo);
 }
 
 const sf::Vector2i &GameCmd::getMousePos() const {
     return mousePos_;
 }
-bool GameCmd::pressUp() const {
-    return up;
+bool GameCmd::pressUp(int i) const {
+    return sf::Keyboard::isKeyPressed(presetKeys[i][0]);
 }
-bool GameCmd::pressDown() const {
-    return down;
+bool GameCmd::pressDown(int i) const {
+    return sf::Keyboard::isKeyPressed(presetKeys[i][1]);
 }
-bool GameCmd::pressLeft() const {
-    return left;
+bool GameCmd::pressLeft(int i) const {
+    return sf::Keyboard::isKeyPressed(presetKeys[i][2]);
 }
-bool GameCmd::pressRight() const {
-    return right;
+bool GameCmd::pressRight(int i) const {
+    return sf::Keyboard::isKeyPressed(presetKeys[i][3]);
 }
-bool GameCmd::pressFire() const {
-    return fire;
-}
-bool GameCmd::pressA() const {
-    return a;
-}
-bool GameCmd::pressE() const {
-    return e;
+bool GameCmd::pressFire(int i) const {
+    return sf::Keyboard::isKeyPressed(presetKeys[i][4]);
 }
