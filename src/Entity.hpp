@@ -42,17 +42,15 @@ public:
     Entity(EntityPtr other) : Entity(*other) {}
     virtual ~Entity() = default;
 
-    // static EntityPtr makeSquare(World* world, float x, float y, float angle);
-    // static EntityPtr makeBullet(World* world, int team, float x, float y, float angle);
-
     virtual void update(const GameCmd* command = nullptr);
     bool collides(const EntityPtr& other);
-    void hitBy(const EntityPtr& other);
+    virtual void hitBy(const EntityPtr& other);
 
     const sf::Vector2f& getPosition() const;
     float getAngle() const;
     void  setAngle(float angle);
     const sf::Vector2f& getDirection() const;
+    void setDirection(sf::Vector2f dir);
     float getSpeed() const;
     void  setSpeed(float s);
     float getXp() const;
@@ -70,5 +68,21 @@ public:
     bool operator==(const Entity& other) const;
     bool operator!=(const Entity& other) const;
 };
+
+
+class Wall : public Entity {
+    // sf::Vector2f position_; -> center of the wall
+    // float angle_; -> angle of the wall
+    // sf::Shape* shape_; -> shape of the wall (two types : circular and rectangular)
+    // sf::Vector2f direction_; -> dimension of the wall if it's a rectangle
+    // float radius_; -> radius of the wall if it's a circle
+public:
+    Wall(World* world, sf::Shape* shape, sf::Vector2f pos, float angle, float radius = 5., sf::Vector2f dir = sf::Vector2f(5., 5.));
+
+    void hitBy(const EntityPtr& other) override { if (other->getAngle() == 0) {} };
+
+    sf::Vector2f getNormal(sf::Vector2f CollisionPosition);
+};
+
 
 #endif

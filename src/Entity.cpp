@@ -53,6 +53,18 @@ void Entity::hitBy(const EntityPtr& other) {
             t->addXp(xp_);
         }
     }
+    Wall* w = dynamic_cast<Wall*>(other.get());
+    if (w) {
+        Bullet* b = dynamic_cast<Bullet*>(this);
+        if (b) {
+            position_ -= direction_ * speed_;
+            sf::Vector2f normal = w->getNormal(position_);
+            world_->push(std::shared_ptr<Entity>(
+                new Bullet(world_, b->getParent(), position_.x, position_.y, atan2f(normal.y, normal.x), speed_, 25)));
+        }
+        sf::Vector2f normal = w->getNormal(position_);
+        position_ -= move_;
+    }
 }
 /* --------- Getters/Setters --------------- */
 float Entity::getAngle() const {
@@ -65,6 +77,9 @@ void Entity::setAngle(float angle) {
 }
 const sf::Vector2f& Entity::getDirection() const {
     return direction_;
+}
+void Entity::setDirection(sf::Vector2f dir) {
+    direction_ = dir;
 }
 
 float Entity::getRotSpeed() const {
@@ -125,3 +140,43 @@ bool Entity::operator!=(const Entity& other) const {
 
 
 
+Wall::Wall(World* world, sf::Shape* shape, sf::Vector2f pos, float angle, float radius, sf::Vector2f dir):
+    Entity(world, -1, radius, shape, pos, angle, 0) {
+        setDirection(dir);
+        bodyDamage_ = 1;
+    }
+
+sf::Vector2f Wall::getNormal(sf::Vector2f CollisionPosition) {
+    sf::Vector2f d = CollisionPosition - position_;
+    if (getShape() == View::getShape("circular wall")) {
+        float len = sqrtf(d.x * d.x + d.y * d.y);
+        return d / len;
+    }
+
+    sf::Vector2f ux = sf::Vector2f(cosf(getAngle()), sinf(getAngle()));
+    sf::Vector2f uy = sf::Vector2f(-sinf(getAngle()), cosf(getAngle()));
+
+    // Projection dans l'espace local
+    float px = d.x * ux.x + d.y * ux.y;
+    float py = - d.x * uy.x + d.y * uy.y;
+
+    float dx = getDirection().x / 2 - std::abs(px);
+    float dy = getDirection().y / 2 - std::abs(py);
+
+    sf::Vector2f localNormal;
+
+    if (dx < dy) {
+        // Face verticale
+        localNormal = (px > 0) ? sf::Vector2f(1, 0) : sf::Vector2f(-1, 0);
+    } else {
+        // Face horizontale
+        localNormal = (py > 0) ? sf::Vector2f(0, 1) : sf::Vector2f(0, -1);
+    }
+
+    // Repasser en espace global
+    sf::Vector2f globalNormal =
+        localNormal.x * ux +
+        localNormal.y * uy;
+
+    return globalNormal;
+}

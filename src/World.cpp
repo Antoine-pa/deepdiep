@@ -17,13 +17,16 @@ World::World(int width, int height, int windowWidth, int windowHeight):
     tanks.push_back(tank);
     entities.push_back(tank);
 
-    for (int i=0; i < width * height / 20000; i++) {
+    for (int i=0; i < width * height / 200000; i++) {
         int pX = randX(), pY = randY();
         if ((pX-tank->getPosition().x)*(pX-tank->getPosition().x) + (pY-tank->getPosition().y)*(pY-tank->getPosition().y) < tank->getRadius() * tank->getRadius() * 16) {
             i--;
         }
         else {
             int asteroidType = std::bind(std::uniform_int_distribution<>(0, 100),  std::mt19937(rd()))();
+            if (asteroidType < 100) {
+                entities.push_back(std::shared_ptr<Entity>(new Wall(this, View::getShape("circular wall"), sf::Vector2f(pX, pY), 0, 15.)));
+            } else
             if (asteroidType < 50) {
                 entities.push_back(std::shared_ptr<Entity>(new AsteroidSquare(this, pX, pY)));
             } else if (asteroidType < 80) {

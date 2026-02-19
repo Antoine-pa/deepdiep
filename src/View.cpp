@@ -56,6 +56,14 @@ void View::initAssets() {
     hexagon->setOutlineThickness(3);
     hexagon->setOrigin(40, 40);
     registerShape("hexagon", hexagon);
+
+    // Walls
+    auto circular = new sf::CircleShape(1.f, 20);
+    circular->setFillColor(sf::Color::Blue);
+    circular->setOutlineColor(sf::Color(sf::Color::Blue.r, sf::Color::Blue.g, sf::Color::Blue.b, 150));
+    circular->setOutlineThickness(0.2);
+    circular->setOrigin(0.5, 0.5);
+    registerShape("circular wall", circular);
     
     // Bullets
     auto bullet = new sf::CircleShape(2.f, 20);
@@ -141,6 +149,9 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
         auto shape = e->getShape();
         shape->setRotation(e->getAngle());
         shape->setPosition(e->getPosition());
+        if (e->getShape() == getShape("circular wall")) {
+            shape->setScale(e->getRadius(), e->getRadius());
+        }
         window_->draw(*shape);
         auto hpRatio = e->getHPRatio();
         if (hpRatio>0 && hpRatio<1) {
