@@ -24,6 +24,7 @@ public:
     void execute();
     void updateMenuFromKeySet(KeySet* ks);
     void addSelectedIndex(bool sens);
+    void setSelectedIndex(int index);
 
 private:
     std::vector<MenuItem> items_;

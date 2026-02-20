@@ -205,6 +205,7 @@ int Game::run(bool stress) {
 
 
     currentMenu = &mainMenu;
+    currentMenu->setSelectedIndex(0);
 
     sf::Clock clock;
 
@@ -236,11 +237,13 @@ int Game::run(bool stress) {
                     else if (inMenu && event.key.code == sf::Keyboard::Enter) {
                         currentMenu->execute();
                     }
+                    else if (event.key.code == sf::Keyboard::Escape) {
+                        world->stop();
+                        if (inMenu) running = false;
+                    }
                 }
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                world->stop();
-            }
+            
             GameCmd cmd(*window_); // This object captures the state of the commands: mouse position + up/down/left/right/fire buttons' states
 
             // Update the world state by one step

@@ -40,12 +40,6 @@ void Menu::update(const sf::RenderWindow& window) {
         }
     }
 
-    // --- Clic souris ---
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        if (items_[selectedIndex_].onClick)
-            items_[selectedIndex_].onClick();
-    }
-
     // --- Mise à jour visuelle ---
     for (int i = 0; i < (int)(items_.size()); i++) {
         if (i == selectedIndex_)
@@ -59,6 +53,10 @@ void Menu::addSelectedIndex(bool sens) {
     else selectedIndex_ = (selectedIndex_ - 1 + items_.size()) % items_.size();
     if (!items_[selectedIndex_].onClick) addSelectedIndex(sens);
 }
+void Menu::setSelectedIndex(int index) {
+    selectedIndex_ = index % items_.size();
+}
+
 
 void Menu::draw(sf::RenderWindow& window) {
     auto background = sf::RectangleShape(sf::Vector2f(width_, height_));
