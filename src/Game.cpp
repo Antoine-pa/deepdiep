@@ -22,7 +22,7 @@ int Game::run(bool stress) {
     sf::Clock fpsClock;
     int frameCount = 0;
     float fps = 0.f;
-    bool displayFPS = false;
+    bool displayFPS = stress;
     sf::Font font;
     if (!font.loadFromFile("Monospace.ttf")) {
         std::cout << "Runtime error: could not load Monospace.ttf font file\n";
@@ -286,20 +286,6 @@ int Game::run(bool stress) {
         startGame(stress);
     }
 
-    // // Done! Display the game outcome until a key is pressed
-    // if (window_->isOpen()) {
-    //     std::string outcome = world->getStringOutcome();
-    //     bool done = false;
-    //     while (not done) {
-    //         layout.update(outcome, world->getWidth()/2, world->getHeight()/2);
-    //         sf::Event event;
-    //         while (window_->pollEvent(event))
-    //             if (event.type == sf::Event::KeyPressed)
-    //                 done = true;
-    //         struct timespec tim{0, 30000000 - (clock.getElapsedTime().asMicroseconds() * 1000)}, tim2;
-    //         nanosleep(&tim, &tim2);
-    //     }
-    // }
     return EXIT_SUCCESS;
 }
 
