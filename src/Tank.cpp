@@ -19,6 +19,7 @@ Tank::Tank(World* world, sf::Vector2f pos, int team) :
     bodyDamage_ = 20;
     bullet_size_ = 2.f;
     bullet_speed_ = 10.f;
+    canonsNumber = 1;
     empty_shape_ = View::getShape("body tank");
 
     ks_ = new KeySet();
@@ -94,17 +95,19 @@ void Tank::update(const GameCmd* command) {
 
 void Tank::fire() {
     if ((int)(world_->getTick()) - last_fire_ >= reload_time_) {
-        world_->push(std::shared_ptr<Entity>(
-            new Bullet(world_, this, getPosition().x, getPosition().y, getAngle(), bullet_speed_, 50, bullet_size_)));
+        int cNumber = getCanonsNumber();
+        for(int i = 0; i<cNumber; i++) {
+            float angle = getAngle()+360*i/cNumber;
+            world_->push(std::shared_ptr<Entity>(
+                new Bullet(world_, this, getPosition().x, getPosition().y, angle, bullet_speed_, 50, bullet_size_)));  
+            impulsion_.x -= cos(angle * 3.14159f / 180.0f) / inertia_;
+            impulsion_.y -= sin(angle * 3.14159f / 180.0f) / inertia_;
+            if (abs(impulsion_.x) > speed_ / 2)
+                impulsion_.x = speed_  /2 * (impulsion_.x / abs(impulsion_.x));
+            if (abs(impulsion_.y) > speed_ / 2)
+                impulsion_.y = speed_ / 2 * (impulsion_.y / abs(impulsion_.y)); 
+        }
         last_fire_ = world_->getTick();
-        
-        // Add recoil of weapons 
-        impulsion_.x -= cos(getAngle() * 3.14159f / 180.0f) / inertia_;
-        impulsion_.y -= sin(getAngle() * 3.14159f / 180.0f) / inertia_;
-        if (abs(impulsion_.x) > speed_ / 2)
-            impulsion_.x = speed_  /2 * (impulsion_.x / abs(impulsion_.x));
-        if (abs(impulsion_.y) > speed_ / 2)
-            impulsion_.y = speed_ / 2 * (impulsion_.y / abs(impulsion_.y));
     }
 }
 
@@ -150,6 +153,14 @@ sf::Vector2f Tank::getRelativeMousePos(sf::Vector2i mousePos) {
 }
 KeySet* Tank::getKeyset() const {
     return ks_;
+}
+
+int Tank::getCanonsNumber() {
+    return canonsNumber;
+}
+
+void Tank::addCanon() {
+    canonsNumber++;
 }
 
 

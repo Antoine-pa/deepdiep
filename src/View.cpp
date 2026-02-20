@@ -195,7 +195,14 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
         }
     }
     for (auto const& s: world_->tanks) {
-        auto shape = s->getEmptyShape();
+        int cNumber = s->getCanonsNumber();
+        auto shape = s->getShape();
+        for(int i = 0; i<cNumber; i++) {
+            shape->setRotation(s->getAngle()+360/cNumber*i);
+            shape->setPosition(s->getPosition());
+            window_->draw(*shape);
+        }
+        shape = s->getEmptyShape();
         shape->setPosition(s->getPosition());
         if (s->getTeam() != tank->getTeam()) {
             shape->setFillColor(sf::Color(255, 41, 28));

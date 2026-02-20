@@ -41,6 +41,8 @@ class Tank: public Entity {
         void setViewportSize(sf::Vector2f worldSize);
         sf::Vector2f getRelativeMousePos(sf::Vector2i mousePos);
         KeySet* getKeyset() const;
+        int getCanonsNumber();
+        void addCanon();
 
     protected:
         int reload_time_ = 5;
@@ -48,7 +50,7 @@ class Tank: public Entity {
         float bullet_size_ = 2.f;
         float bullet_speed_ = 10.f;
         sf::Shape* empty_shape_;
-
+        int canonsNumber;
     private:
         sf::View viewport_;
         int last_fire_ = 0;
@@ -68,5 +70,4 @@ class Destroyer: public Tank {
         explicit Destroyer(World* world, sf::Vector2f pos, int team);
         ~Destroyer();
 };
-
 #endif
