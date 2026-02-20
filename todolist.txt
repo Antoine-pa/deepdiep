@@ -1,5 +1,5 @@
 faire des changements qualitatifs sur les tanks (rajouter des tanks)
-ajouter la logique du jeu (game design, faire les niveaux d'xp)
+ajouter la logique du jeu (game design, faire les niveaux d'xp, quand le jeu se lance il faut recommencer un monde)
 faire le découpage de la grille pour ne pas tester toute les collisions
 faire un menu
 split les commandes pour jouer à plusieurs -> faire le menu pour bind les touches

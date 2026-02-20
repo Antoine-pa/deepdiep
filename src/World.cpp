@@ -35,6 +35,12 @@ World::World(int width, int height, int windowWidth, int windowHeight, bool stre
             }
         }
     }
+    if (stress) {
+        auto randTeam = std::bind(std::uniform_int_distribution<>(1, 15), std::mt19937(rd()));
+        for (int i = 0; i < width * height / 20000; i++) {
+            spawnPlayer(randTeam());
+        }
+    }
 }
 
 void World::update(const GameCmd& cmd) {

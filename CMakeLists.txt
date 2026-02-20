@@ -12,7 +12,7 @@ find_package(SFML 2 REQUIRED system window graphics)
 add_executable(deepdiep src/Entity.cpp src/Entity.hpp src/Tank.cpp src/Tank.hpp src/Bullet.cpp src/Bullet.hpp src/Asteroid.cpp src/Asteroid.hpp
                         src/Game.cpp src/Game.hpp src/GameCmd.cpp src/GameCmd.hpp
                         src/View.cpp src/View.hpp src/Layout.cpp src/Layout.hpp
-                        src/World.cpp src/World.hpp
+                        src/World.cpp src/World.hpp src/Menu.cpp src/Menu.hpp
                         )
 
 target_link_libraries(deepdiep sfml-graphics sfml-window sfml-system)

@@ -101,8 +101,6 @@ void Tank::fire() {
         // Add recoil of weapons 
         impulsion_.x -= cos(getAngle() * 3.14159f / 180.0f) / inertia_;
         impulsion_.y -= sin(getAngle() * 3.14159f / 180.0f) / inertia_;
-        // impulsion_.x -= inertia_ * cos(getAngle() * 3.14159f / 180.0f);
-        // impulsion_.y -= inertia_ * sin(getAngle() * 3.14159f / 180.0f);
         if (abs(impulsion_.x) > speed_ / 2)
             impulsion_.x = speed_  /2 * (impulsion_.x / abs(impulsion_.x));
         if (abs(impulsion_.y) > speed_ / 2)

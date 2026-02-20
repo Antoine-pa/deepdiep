@@ -2,7 +2,9 @@
 #include "World.hpp"
 #include "Layout.hpp"
 #include "GameCmd.hpp"
+#include "Menu.hpp"
 #include <iostream>
+
 
 static const int width = 800;
 static const int heigth = 600;
@@ -14,21 +16,30 @@ Game::Game() : window_(std::make_shared<sf::RenderWindow>(sf::VideoMode(width, h
 int Game::run(bool stress) {
     auto world = std::make_shared<World>(2000, 2000, width, heigth, stress);
     Layout layout(world, window_);
-    layout.addPlayerToLayout(world->spawnPlayer(2));
+    // layout.addPlayerToLayout(world->spawnPlayer(2));
     // layout.addPlayerToLayout(world->spawnPlayer(3));
     // layout.addPlayerToLayout(world->spawnPlayer(4));
+
 
     // Gestion de l'affichage des FPS :
     sf::Clock fpsClock;
     int frameCount = 0;
     float fps = 0.f;
-    bool displayFPS = true;
+    bool displayFPS = false;
     sf::Font font;
     if (!font.loadFromFile("Monospace.ttf")) {
         std::cout << "Runtime error: could not load Monospace.ttf font file\n";
         exit(1);
     }
-    
+
+    Menu mainMenu(font, 0.f, 0.f, world->getWindowWidth(), world->getWindowHeight(), 60.f);
+    mainMenu.addItem("DeepDiep", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, nullptr);
+    mainMenu.addItem("Start", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [](){ std::cout << "Start game\n"; });
+    mainMenu.addItem("Options", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [](){ std::cout << "Options\n"; });
+    mainMenu.addItem("Quit", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [](){ std::cout << "Quit\n"; });
+    bool inMenu = true;
+    Menu* currentMenu = &mainMenu;
+
     sf::Clock clock;
     while (world->running() && window_->isOpen()) {
         clock.restart(); // Each frame should take exactly 0.03 seconds
@@ -44,6 +55,15 @@ int Game::run(bool stress) {
                     fpsClock.restart();
                     fps = 0.f;
                     frameCount = 0;
+                }
+                else if (inMenu && event.key.code == sf::Keyboard::Down) {
+                    currentMenu->addSelectedIndex(true);
+                }
+                else if (inMenu && event.key.code == sf::Keyboard::Up) {
+                    currentMenu->addSelectedIndex(false);
+                }
+                else if (inMenu && event.key.code == sf::Keyboard::Enter) {
+                    currentMenu->execute();
                 }
             }
         }
@@ -75,6 +95,14 @@ int Game::run(bool stress) {
             window_->setView(window_->getDefaultView());
             window_->draw(displayedText);
         }
+
+        if (inMenu) {
+            currentMenu->update(*window_);
+            currentMenu->draw(*window_);
+        }
+
+
+        
         window_->display();
         // Sleep until the end of the frame
         struct timespec tim{0, 30000000 - (clock.getElapsedTime().asMicroseconds() * 1000)}, tim2;
@@ -106,3 +134,4 @@ int main(int argv, char const** argc) {
     }
     return Game().run();
 }
+

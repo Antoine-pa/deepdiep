@@ -19,8 +19,11 @@ Layout::Layout(std::shared_ptr<World> world, std::shared_ptr<sf::RenderWindow> w
 
 void Layout::update(std::string overlayText, int x, int y) {
     window_->clear(sf::Color(225, 225, 225));
-    for (auto &player : players_)
+    for (auto &player : players_) {
         View::update(player.get(), overlayText, x, y);
+    }
+    window_->setView(window_->getDefaultView());
+    // View::drawMainMenu();
 }
 
 void Layout::addPlayerToLayout(std::shared_ptr<Tank> player) {

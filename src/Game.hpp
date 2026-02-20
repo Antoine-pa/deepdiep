@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include "View.hpp"
 
 class Game {
     std::shared_ptr<sf::RenderWindow> window_;
@@ -12,5 +13,7 @@ public:
     int run(bool stress = false);
     void quit();
 };
+
+
 
 #endif

@@ -25,6 +25,10 @@ public:
     static void registerShape(std::string name, sf::Shape* shape);
 
     void update(Tank* tank, std::string overlayText = "", int x=0, int y=0);
+    void drawMainMenu();
+    void drawDeadMenu(Tank* tank);
+    void drawSettingsMenu(Tank* tank);
+
     World* getWorld();
 };
 #endif
