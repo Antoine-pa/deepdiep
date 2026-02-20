@@ -13,10 +13,13 @@ World::World(int width, int height, int windowWidth, int windowHeight, bool stre
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
 
     auto tank = std::make_shared<Tank>(this, sf::Vector2f(randX(), randY()), 1);
+    auto enemy = std::make_shared<Tank>(this, sf::Vector2f(randX(), randY()), 15);
     
     tanks.push_back(tank);
+    tanks.push_back(enemy);
     entities.push_back(tank);
-
+    entities.push_back(enemy);
+    
     for (int i=0; i < (stress ? width * height / 1000 : width * height / 20000); i++) {
         int pX = randX(), pY = randY();
         if ((pX-tank->getPosition().x)*(pX-tank->getPosition().x) + (pY-tank->getPosition().y)*(pY-tank->getPosition().y) < tank->getRadius() * tank->getRadius() * 16) {
@@ -75,8 +78,7 @@ void World::update(const GameCmd& cmd) {
             tanks.pop_back();
         }
     }
-    if (entities.size() == tanks.size() || tanks.empty())
-        stop();
+    endGame();
 }
 std::string World::getStringOutcome() {
     if (tanks.empty())
@@ -88,6 +90,14 @@ std::string World::getStringOutcome() {
 
 void World::push(EntityPtr e) {
     entities.push_back(e);
+}
+void World::endGame() {
+    int team = -1;
+    for (auto &t : tanks) {
+        if (team == -1) team = t->getTeam();
+        else if (team != t->getTeam()) return;
+    }
+    stop();
 }
 
 sf::Vector2f World::getCameraPos(Tank* tank) const {

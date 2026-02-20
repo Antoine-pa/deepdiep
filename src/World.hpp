@@ -35,6 +35,7 @@ public:
     void stop() {running_ = false;}
     std::string getStringOutcome();
     void push(EntityPtr e);
+    void endGame();
 
     std::shared_ptr<Tank> spawnPlayer(int team);
 

@@ -22,7 +22,7 @@ int Game::run(bool stress) {
     sf::Clock fpsClock;
     int frameCount = 0;
     float fps = 0.f;
-    bool displayFPS = false;
+    bool displayFPS = stress;
     sf::Font font;
     if (!font.loadFromFile("Monospace.ttf")) {
         std::cout << "Runtime error: could not load Monospace.ttf font file\n";
@@ -205,6 +205,7 @@ int Game::run(bool stress) {
 
 
     currentMenu = &mainMenu;
+    currentMenu->setSelectedIndex(0);
 
     sf::Clock clock;
 
@@ -236,11 +237,13 @@ int Game::run(bool stress) {
                     else if (inMenu && event.key.code == sf::Keyboard::Enter) {
                         currentMenu->execute();
                     }
+                    else if (event.key.code == sf::Keyboard::Escape) {
+                        world->stop();
+                        if (inMenu) running = false;
+                    }
                 }
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                world->stop();
-            }
+            
             GameCmd cmd(*window_); // This object captures the state of the commands: mouse position + up/down/left/right/fire buttons' states
 
             // Update the world state by one step
@@ -283,20 +286,6 @@ int Game::run(bool stress) {
         startGame(stress);
     }
 
-    // // Done! Display the game outcome until a key is pressed
-    // if (window_->isOpen()) {
-    //     std::string outcome = world->getStringOutcome();
-    //     bool done = false;
-    //     while (not done) {
-    //         layout.update(outcome, world->getWidth()/2, world->getHeight()/2);
-    //         sf::Event event;
-    //         while (window_->pollEvent(event))
-    //             if (event.type == sf::Event::KeyPressed)
-    //                 done = true;
-    //         struct timespec tim{0, 30000000 - (clock.getElapsedTime().asMicroseconds() * 1000)}, tim2;
-    //         nanosleep(&tim, &tim2);
-    //     }
-    // }
     return EXIT_SUCCESS;
 }
 
