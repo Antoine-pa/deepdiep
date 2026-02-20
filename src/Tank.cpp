@@ -91,6 +91,12 @@ void Tank::update(const GameCmd* command) {
         position_.y = radius_;
     else if (position_.y + radius_ > world_->getHeight())
         position_.y = world_->getHeight() - radius_;
+
+    if(getXp()>=getGoalScore()) {
+        setGoalScore(getGoalScore()*1.5);
+        resetXp();
+        addCanon();
+    }
 }
 
 void Tank::fire() {

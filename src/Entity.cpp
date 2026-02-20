@@ -85,6 +85,9 @@ float Entity::getXp() const {
 void  Entity::addXp(float xp) {
     xp_ += xp;
 }
+void Entity::resetXp() {
+    xp_ = 0;
+}
 void Entity::setInertia(float i) {
     inertia_ = i;
 }

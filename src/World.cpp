@@ -13,8 +13,6 @@ World::World(int width, int height, int windowWidth, int windowHeight, bool stre
     auto randY     = std::bind(std::uniform_int_distribution<>(0, height_-1), std::mt19937(rd()));
 
     auto tank = std::make_shared<Tank>(this, sf::Vector2f(randX(), randY()), 1);
-    tank->addCanon();
-    tank->addCanon();
     
     tanks.push_back(tank);
     entities.push_back(tank);
