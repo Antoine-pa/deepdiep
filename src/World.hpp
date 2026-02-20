@@ -37,6 +37,8 @@ public:
     std::shared_ptr<Tank> spawnPlayer(int team);
 
     sf::Vector2f getCameraPos(Tank* tank) const;
+
+    void startGame(); // Create a new world with the same parameters that the current world
     
     int getWindowWidth() const;
     int getWindowHeight() const;

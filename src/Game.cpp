@@ -31,13 +31,13 @@ int Game::run(bool stress) {
         std::cout << "Runtime error: could not load Monospace.ttf font file\n";
         exit(1);
     }
+    bool inMenu = true;
 
     Menu mainMenu(font, 0.f, 0.f, world->getWindowWidth(), world->getWindowHeight(), 60.f);
     mainMenu.addItem("DeepDiep", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, nullptr);
-    mainMenu.addItem("Start", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [](){ std::cout << "Start game\n"; });
+    mainMenu.addItem("Start", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [world](){ world->startGame(); });
     mainMenu.addItem("Options", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [](){ std::cout << "Options\n"; });
-    mainMenu.addItem("Quit", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [](){ std::cout << "Quit\n"; });
-    bool inMenu = true;
+    mainMenu.addItem("Quit", world->getWindowWidth() / 2, world->getWindowHeight() / 3, true, [world](){ world->stop(); });
     Menu* currentMenu = &mainMenu;
 
     sf::Clock clock;
