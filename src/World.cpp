@@ -104,7 +104,6 @@ sf::Vector2f World::getCameraPos(Tank* tank) const {
     sf::Vector2f tankPos = tank->getPosition();
     float zoom = tank->getZoom();
 
-    // Il faut encore vérifier que la caméra s'arête au bord de l'écran si on dépasse (en prenant en compte le zoom)
     float halfViewW = (windowWidth_ * tank->getViewport().getViewport().width / 2.) / zoom;
     float halfViewH = (windowHeight_ * tank->getViewport().getViewport().height / 2.) / zoom;
     if (tankPos.x + halfViewW > width_) {

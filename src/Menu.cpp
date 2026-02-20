@@ -25,9 +25,6 @@ void Menu::addItem(const std::string& label, int size, float posX, float posY, b
     item.bounds = item.text.getGlobalBounds();
     item.onClick = callback;
 
-    // if (items_.size() > 0 && !items_[selectedIndex_].onClick && callback)
-    //     selectedIndex_ = (int)(items_.size());
-
     items_.push_back(item);
 }
 void Menu::update(const sf::RenderWindow& window) {

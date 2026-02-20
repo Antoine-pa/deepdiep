@@ -172,10 +172,6 @@ void Tank::addCanon() {
     canonsNumber++;
 }
 
-void Tank::reset() {
-
-}
-
 
 
 

@@ -218,12 +218,6 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
 
     if (not overlayText.empty()) {
         drawText(window_.get(), font, overlayText, x, y, 36, true);
-        // sf::Text displayedText(overlayText, font, 36);
-        // displayedText.setStyle(sf::Text::Bold);
-        // displayedText.setFillColor(sf::Color::Black);
-        // auto bounds = displayedText.getLocalBounds();
-        // displayedText.setPosition(x-bounds.width/2, y-bounds.height);
-        // window_->draw(displayedText);
     }
 
     // Drawing score bar
@@ -254,33 +248,6 @@ void View::update(Tank* tank, std::string overlayText, int x, int y) {
 
 }
 
-void View::drawMainMenu() {
-    auto screen = sf::RectangleShape(sf::Vector2f(world_->windowWidth_, world_->windowHeight_));
-    screen.setFillColor(sf::Color(0, 0, 0, 150));
-    window_->draw(screen);
-
-    int height = world_->windowHeight_ / 3;
-    sf::FloatRect title = drawText(window_.get(), font, "DeepDiep", world_->windowWidth_/2, height, 72, true);
-    height += title.height * 2;
-    sf::FloatRect addPlayer = drawText(window_.get(), font, "Add player", world_->windowWidth_/2, height, 40, true);
-    height += addPlayer.height;
-    sf::FloatRect settings =  drawText(window_.get(), font, "Settings", world_->windowWidth_/2, height, 40, true);
-    height += settings.height;
-    sf::FloatRect start = drawText(window_.get(), font, "Start the game", world_->windowWidth_/2, height, 40, true);
-    height += start.height;
-
-    (void)addPlayer;
-    (void)settings;
-    (void)start;
-    (void)title;
-
-}
-void View::drawDeadMenu(Tank* tank) {
-    (void)tank;
-}
-void View::drawSettingsMenu(Tank* tank) {
-    (void)tank;
-}
 
 World* View::getWorld() {
     return world_.get();

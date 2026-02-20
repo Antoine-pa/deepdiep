@@ -23,7 +23,6 @@ void Layout::update(std::string overlayText, int x, int y) {
         View::update(player.get(), overlayText, x, y);
     }
     window_->setView(window_->getDefaultView());
-    // View::drawMainMenu();
 }
 
 void Layout::addPlayerToLayout(std::shared_ptr<Tank> player) {

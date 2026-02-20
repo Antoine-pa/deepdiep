@@ -45,8 +45,6 @@ class Tank: public Entity {
         int getCanonsNumber();
         void addCanon();
 
-        void reset();
-
     protected:
         int reload_time_ = 5;
         int damage_ = 6;
