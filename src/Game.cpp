@@ -11,8 +11,8 @@ Game::Game() : window_(std::make_shared<sf::RenderWindow>(sf::VideoMode(width, h
     window_->setKeyRepeatEnabled(false);
 }
 
-int Game::run() {
-    auto world = std::make_shared<World>(2000, 2000, width, heigth);
+int Game::run(bool stress) {
+    auto world = std::make_shared<World>(2000, 2000, width, heigth, stress);
     Layout layout(world, window_);
     layout.addPlayerToLayout(world->spawnPlayer(2));
     // layout.addPlayerToLayout(world->spawnPlayer(3));
@@ -98,6 +98,11 @@ int Game::run() {
     return EXIT_SUCCESS;
 }
 
-int main(int, char const**) {
+int main(int argv, char const** argc) {
+    if (argv > 1) {
+        std::string m = argc[1];
+        if (m == "stressTest")
+            return Game().run(true);
+    }
     return Game().run();
 }

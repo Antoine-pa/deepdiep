@@ -4,7 +4,7 @@
 #include <functional>
 
 
-World::World(int width, int height, int windowWidth, int windowHeight):
+World::World(int width, int height, int windowWidth, int windowHeight, bool stress):
     width_(width), height_(height), windowWidth_(windowWidth), windowHeight_(windowHeight) {
     
     std::random_device rd;
@@ -17,7 +17,7 @@ World::World(int width, int height, int windowWidth, int windowHeight):
     tanks.push_back(tank);
     entities.push_back(tank);
 
-    for (int i=0; i < width * height / 20000; i++) {
+    for (int i=0; i < (stress ? width * height / 1000 : width * height / 20000); i++) {
         int pX = randX(), pY = randY();
         if ((pX-tank->getPosition().x)*(pX-tank->getPosition().x) + (pY-tank->getPosition().y)*(pY-tank->getPosition().y) < tank->getRadius() * tank->getRadius() * 16) {
             i--;

@@ -9,7 +9,7 @@ class Game {
 
 public:
     Game();
-    int run();
+    int run(bool stress = false);
     void quit();
 };
 

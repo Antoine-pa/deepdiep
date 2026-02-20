@@ -22,7 +22,7 @@ class World {
     int windowHeight_;
 
 public:
-    World(int width, int height, int windowWidth, int windowHeight);
+    World(int width, int height, int windowWidth, int windowHeight, bool stress = false);
     int getWidth() { return width_;}
     int getHeight() { return height_;}
     unsigned long getTick() {return tick_;}
