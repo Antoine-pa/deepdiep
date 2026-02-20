@@ -44,3 +44,8 @@
 CMakeCache.txt
 CMakeFiles/
 build/
+
+rapport.aux
+rapport.log
+rapport.out
+rapport.tex
