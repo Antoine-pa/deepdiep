@@ -4,7 +4,11 @@
 #include "View.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 
+class Game;
+
 class Layout: public View {
+    friend Game;
+
     private:
         std::vector<sf::View> views_{7};
         std::vector<std::shared_ptr<Tank>> players_;

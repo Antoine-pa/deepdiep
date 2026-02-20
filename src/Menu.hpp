@@ -4,6 +4,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <functional>
+#include "GameCmd.hpp"
 
 
 struct MenuItem {
@@ -17,10 +18,11 @@ class Menu {
 public:
     Menu(const sf::Font& font, float x, float y, float width, float height, float spacing);
 
-    void addItem(const std::string& label, float posX, float posY, bool centered, std::function<void()> callback);
+    void addItem(const std::string& label, int size, float posX, float posY, bool centered, std::function<void()> callback);
     void update(const sf::RenderWindow& window);
     void draw(sf::RenderWindow& window);
     void execute();
+    void updateMenuFromKeySet(KeySet* ks);
     void addSelectedIndex(bool sens);
 
 private:

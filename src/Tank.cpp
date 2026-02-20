@@ -160,6 +160,9 @@ sf::Vector2f Tank::getRelativeMousePos(sf::Vector2i mousePos) {
 KeySet* Tank::getKeyset() const {
     return ks_;
 }
+void Tank::setKeyset(KeySet* ks) {
+    ks_ = ks;
+}
 
 int Tank::getCanonsNumber() {
     return canonsNumber;
@@ -167,6 +170,10 @@ int Tank::getCanonsNumber() {
 
 void Tank::addCanon() {
     canonsNumber++;
+}
+
+void Tank::reset() {
+
 }
 
 

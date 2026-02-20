@@ -41,8 +41,11 @@ class Tank: public Entity {
         void setViewportSize(sf::Vector2f worldSize);
         sf::Vector2f getRelativeMousePos(sf::Vector2i mousePos);
         KeySet* getKeyset() const;
+        void setKeyset(KeySet* ks);
         int getCanonsNumber();
         void addCanon();
+
+        void reset();
 
     protected:
         int reload_time_ = 5;

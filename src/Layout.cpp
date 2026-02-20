@@ -38,4 +38,8 @@ void Layout::removePlayerToLayout(std::shared_ptr<Tank> player) {
         std::remove(players_.begin(), players_.end(), player),
         players_.end()
     );
+    int nb_player = players_.size();
+    for (int i = 0; i < nb_player; i++) {
+        players_[i]->setViewport(views_[nb_player - 1 + i]);
+    }
 }

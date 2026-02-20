@@ -8,11 +8,11 @@
 Menu::Menu(const sf::Font& font, float x, float y, float width, float height, float spacing):
     font_(font), startX_(x), startY_(y), width_(width), height_(height), spacing_(spacing) {}
 
-void Menu::addItem(const std::string& label, float posX, float posY, bool centered, std::function<void()> callback) {
+void Menu::addItem(const std::string& label, int size, float posX, float posY, bool centered, std::function<void()> callback) {
     MenuItem item;
     item.text.setFont(font_);
     item.text.setString(label);
-    item.text.setCharacterSize(32);
+    item.text.setCharacterSize(size);
     item.text.setFillColor(sf::Color::White);
     item.text.setStyle(sf::Text::Bold);
     item.centered = centered;
@@ -25,24 +25,17 @@ void Menu::addItem(const std::string& label, float posX, float posY, bool center
     item.bounds = item.text.getGlobalBounds();
     item.onClick = callback;
 
-    if (items_.size() > 0 && !items_[selectedIndex_].onClick && callback)
-        selectedIndex_ = (int)(items_.size());
+    // if (items_.size() > 0 && !items_[selectedIndex_].onClick && callback)
+    //     selectedIndex_ = (int)(items_.size());
 
     items_.push_back(item);
 }
 void Menu::update(const sf::RenderWindow& window) {
-    // --- Navigation clavier ---
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-    //     selectedIndex_ = (selectedIndex_ + 1) % items_.size();
-    // }
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-    //     selectedIndex_ = (selectedIndex_ - 1 + items_.size()) % items_.size();
-    // }
 
     // --- Survol souris ---
     sf::Vector2i mouse = sf::Mouse::getPosition(window);
     for (int i = 0; i < (int)(items_.size()); i++) {
-        if (items_[i].bounds.contains(mouse.x, mouse.y)) {
+        if (items_[i].bounds.contains(mouse.x, mouse.y) && items_[i].onClick) {
             selectedIndex_ = i;
         }
     }
@@ -85,4 +78,52 @@ void Menu::draw(sf::RenderWindow& window) {
 void Menu::execute() {
     if (items_[selectedIndex_].onClick)
         items_[selectedIndex_].onClick();
+}
+void Menu::updateMenuFromKeySet(KeySet* ks) {
+    for (auto& item : items_) {
+        if (item.text.getString().find("Move mode") != std::string::npos) {
+            std::string text = "Move mode : ";
+            if (ks->move_type == KeySet::Move::MKeys) text += "Keyboard";
+            else text += "Joystick";
+            item.text.setString(text);
+        }
+        if (item.text.getString().find("Aim mode") != std::string::npos) {
+            std::string text = "Aim mode : ";
+            if (ks->aim_type == KeySet::Aim::AMouse) text += "Mouse";
+            else if (ks->aim_type == KeySet::Aim::AJoystick) text += "Joystick";
+            else text += "Keyboard";
+            item.text.setString(text);
+        }
+
+        if (item.text.getString().find("Move Up") != std::string::npos) {
+            item.text.setString("Move Up : " + std::to_string((ks->up[0])));
+        }
+        if (item.text.getString().find("Move Down") != std::string::npos) {
+            item.text.setString("Move Down : " + std::to_string((ks->down[0])));
+        }
+        if (item.text.getString().find("Move Left") != std::string::npos) {
+            item.text.setString("Move Left : " + std::to_string((ks->left[0])));
+        }
+        if (item.text.getString().find("Move Right") != std::string::npos) {
+            item.text.setString("Move Right : " + std::to_string((ks->right[0])));
+        }
+        if (item.text.getString().find("Fire") != std::string::npos) {
+            item.text.setString("Fire : " + std::to_string((ks->fire[0])));
+        }
+        
+        if (item.text.getString().find("View Up") != std::string::npos) {
+            item.text.setString("View Up : " + std::to_string((ks->vup[0])));
+        }
+        if (item.text.getString().find("View Down") != std::string::npos) {
+            item.text.setString("View Down : " + std::to_string((ks->vdown[0])));
+        }
+        if (item.text.getString().find("View Left") != std::string::npos) {
+            item.text.setString("View Left : " + std::to_string((ks->vleft[0])));
+        }
+        if (item.text.getString().find("View Right") != std::string::npos) {
+            item.text.setString("View Right : " + std::to_string((ks->vright[0])));
+        }
+
+        item.bounds = item.text.getGlobalBounds();
+    }
 }

@@ -143,7 +143,3 @@ int World::getWindowWidth() const {
 int World::getWindowHeight() const {
     return windowHeight_;
 }
-
-void World::startGame() {
-    
-}
